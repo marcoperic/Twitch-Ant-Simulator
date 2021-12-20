@@ -15,6 +15,7 @@ int main()
     } else {
         std::cout << "Configuration file couldn't be found." << std::endl;
     }
+
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 4;
     int32_t window_style = Conf::USE_FULLSCREEN ? sf::Style::Fullscreen : sf::Style::Default;
@@ -22,6 +23,7 @@ int main()
 	window.setFramerateLimit(60);
     // Initialize simulation
     Simulation simulation(window);
+    simulation.createColony(Conf::WIN_WIDTH / 2 , Conf::WIN_HEIGHT / 2); // Creates a single colony off the rip
     // Create editor scene around it
     GUI::Scene::Ptr scene = create<edtr::EditorScene>(window, simulation);
     scene->resize();

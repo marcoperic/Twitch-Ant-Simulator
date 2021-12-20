@@ -9,6 +9,7 @@
 #include "simulation/world/map_loader.hpp"
 #include "simulation/ant/fight_system.hpp"
 #include "world/async_distance_field_builder.hpp"
+#include <iostream> // For printing debug statements.
 
 
 struct Simulation
@@ -53,6 +54,7 @@ struct Simulation
 
 	void update(float dt)
 	{
+        // std::cout << "Update";
 		if (!ev_state.pause) {
             // Mark ants with no more time left as dead
             removeDeadAnts();
@@ -67,6 +69,7 @@ struct Simulation
                     updateColonyPosition(colony);
                 }
             }
+
 			for (Colony& colony : colonies) {
 				colony.genericAntsUpdate(dt, world);
 			}
