@@ -11,6 +11,12 @@
 #include "world/async_distance_field_builder.hpp"
 #include <iostream> // For printing debug statements.
 
+// Notes:
+// Simulation seems to control pretty much everything that goes on. For GUI manipulation, see editor_scene.
+
+// TODO:
+// Design a way to control this by using a web interface. Maybe have incoming calls handled by a JSON file or some
+// kind of queue-like data structure that is  
 
 struct Simulation
 {
@@ -58,6 +64,14 @@ struct Simulation
 		if (!ev_state.pause) {
             // Mark ants with no more time left as dead
             removeDeadAnts();
+
+            // Get incoming data from queue structure to perform operations based on chat interaction
+            // cmdQueue.update();
+            // if (cmdQueue.size() > 0)
+            // {
+            //     ...
+            // } 
+
 			// Update world cells (markers, density, walls)
 			world.update(dt);
 			// First perform position update and grid registration
