@@ -79,14 +79,14 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             c.privmsg(self.channel, "Did not understand command: " + cmd)
 
 def main():
-    if len(sys.argv) != 5:
+    if len(sys.argv) == 5:
         print("Usage: twitchbot <username> <client id> <token> <channel>")
         sys.exit(1)
 
-    username  = sys.argv[1]
-    client_id = sys.argv[2]
-    token     = sys.argv[3]
-    channel   = sys.argv[4]
+    username  = 'mperic_chatbot'
+    client_id = 'gp762nuuoqcoxypju8c569th9wz7q5'
+    token     = '57mmemwwnb0p1b6z366fv1cuw1tb03'
+    channel   = 'mperic'
 
     bot = TwitchBot(username, client_id, token, channel)
     bot.start()

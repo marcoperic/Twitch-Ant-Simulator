@@ -2,5 +2,5 @@ mperic_chatbot
 pw: ...1?
 
 Access token: ojdd9imuaw3mzph5prbuzpms5rlj0o
-Client ID: gp762nuuoqcoxypju8c569th9wz7q5
+Client ID: gp762nuuoqcoxypju8c569th9wz7q5 || rtxhsmm83i1u8dgtug874hp8jj3n74
 OAuth token: oauth:57mmemwwnb0p1b6z366fv1cuw1tb03
