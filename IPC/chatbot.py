@@ -11,6 +11,11 @@ or in the "license" file accompanying this file. This file is distributed on an 
 import sys
 import irc.bot
 import requests
+import threading
+import time
+import _thread
+
+from server import Server
 
 class TwitchBot(irc.bot.SingleServerIRCBot):
     def __init__(self, username, client_id, token, channel):
@@ -87,6 +92,9 @@ def main():
     client_id = 'gp762nuuoqcoxypju8c569th9wz7q5'
     token     = '57mmemwwnb0p1b6z366fv1cuw1tb03'
     channel   = 'mperic'
+
+    cvar = Server()
+    cvar.init_threading()
 
     bot = TwitchBot(username, client_id, token, channel)
     bot.start()

@@ -6,18 +6,27 @@
 
 import time
 import zmq
+import _thread
 
-context = zmq.Context()
-socket = context.socket(zmq.REP)
-socket.bind("tcp://*:5555")
+class Server:
 
-while True:
-    #  Wait for next request from client
-    message = socket.recv()
-    print("Received request: %s" % message)
+    def init_threading(self):
+        print('Starting threads.')
+        _thread.start_new_thread(self.init_connections, ())
 
-    #  Do some 'work'
-    time.sleep(1)
+    def init_connections(self):
+        context = zmq.Context()
+        socket = context.socket(zmq.REP)
+        socket.bind("tcp://*:5555")
 
-    #  Send reply back to client
-    socket.send(b"World")
+        print('Listening for incoming requests')
+        while True:
+            #  Wait for next request from client
+            message = socket.recv()
+            print("Received request: %s" % message)
+
+            #  Do some 'work'
+            time.sleep(1)
+
+            #  Send reply back to client
+            socket.send(b"World")
