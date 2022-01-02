@@ -23,7 +23,7 @@ int main()
 	window.setFramerateLimit(60);
     // Initialize simulation
     Simulation simulation(window);
-    simulation.createColony(Conf::WIN_WIDTH / 2 , Conf::WIN_HEIGHT / 2); // Creates a single colony off the rip
+    // simulation.createColony(Conf::WIN_WIDTH / 2 , Conf::WIN_HEIGHT / 2); // Creates a single colony off the rip
     // Create editor scene around it
     GUI::Scene::Ptr scene = create<edtr::EditorScene>(window, simulation);
     scene->resize();

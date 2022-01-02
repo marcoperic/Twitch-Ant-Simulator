@@ -95,7 +95,7 @@ def main():
 
     cvar = Server()
     cvar.init_threading()
-
+    
     bot = TwitchBot(username, client_id, token, channel)
     bot.start()
 

@@ -15,8 +15,7 @@
 // Simulation seems to control pretty much everything that goes on. For GUI manipulation, see editor_scene.
 
 // TODO:
-// Design a way to control this by using a web interface. Maybe have incoming calls handled by a JSON file or some
-// kind of queue-like data structure that is  
+// Command queue.
 
 struct Simulation
 {

@@ -119,6 +119,7 @@ struct Colony
 		if (pop_diff_update.updateAutoReset(dt)) {
  			pop_diff.addValue(ants.size());
 		}
+		
 		createNewAnts(dt);
 		// Update ants and check if collision with colony
 		for (Ant& ant : ants) {
