@@ -33,18 +33,19 @@ class Server:
 
 # Uncomment and run to test IPC between C and C++ interfaces.
 
-# context = zmq.Context()
-# socket = context.socket(zmq.REP)
-# socket.bind("tcp://*:5555")
+context = zmq.Context()
+socket = context.socket(zmq.REP)
+socket.bind("tcp://*:5555")
+# connected = socket.recv() # awaiting connection
 
-# print('Listening for incoming requests')
-# while True:
-#     #  Wait for next request from client
-#     message = socket.recv()
-#     print("Received request: %s" % message)
+print('Listening for incoming requests')
+while True:
+    #  Wait for next request from client
+    message = socket.recv()
+    print("Received request")
 
-#     #  Do some 'work'
-#     time.sleep(1)
+    time.sleep(1) # may set to 10 or 15s
+    # Check to see if object has been populated with commands from user. If greater than one, send commands down pipeline.
 
-#     #  Send reply back to client
-#     socket.send(b"World")
+    #  Send reply back to client
+    socket.send(b"12345678")

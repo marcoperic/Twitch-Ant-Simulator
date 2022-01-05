@@ -1,19 +1,19 @@
 #include <iostream>
 #include "client.c"
 #include "client-controller.h"
+#include <thread>
 using namespace std;
 
 void relay(const char* str)
 {
-    cout << "RELAY: ";
-    cout << str;
-    cout << "\n";
+    printf("%s\n", str);
 }
 
 // -lzmq flag for compilation
 int main()
 {
     cout << "started!\n";
-    startClient();
+    thread client_connection(startClient);
+    client_connection.join();
     return 0;
 }
