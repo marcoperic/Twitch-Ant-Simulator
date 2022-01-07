@@ -22,6 +22,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         self.client_id = client_id
         self.token = token
         self.channel = '#' + channel
+        self.cvar = Server()
 
         # Get the channel id, we will need this for v5 API calls
         url = 'https://api.twitch.tv/kraken/users?login=' + channel
@@ -56,7 +57,6 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
 
     def do_command(self, e, cmd):
         c = self.connection
-
         # Poll the API to get current game.
         if cmd == "game":
             url = 'https://api.twitch.tv/kraken/channels/' + self.channel_id
@@ -82,6 +82,8 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         # The command was not recognized
         else:
             c.privmsg(self.channel, "Did not understand command: " + cmd)
+            print("Send to command queue")
+            self.cvar.command_queue.append(cmd)
 
 def main():
     if len(sys.argv) == 5:
@@ -93,10 +95,9 @@ def main():
     token     = '57mmemwwnb0p1b6z366fv1cuw1tb03'
     channel   = 'mperic'
 
-    cvar = Server()
-    cvar.init_threading()
     
     bot = TwitchBot(username, client_id, token, channel)
+    bot.cvar.init_threading()
     bot.start()
 
 if __name__ == "__main__":
