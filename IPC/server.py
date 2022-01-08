@@ -26,6 +26,7 @@ class Server:
     def init_threading(self):
         print('Starting threads.')
         _thread.start_new_thread(self.init_connections, ())
+        
 
     def init_connections(self):
         self.test = 2

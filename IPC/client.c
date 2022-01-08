@@ -33,6 +33,7 @@ void startClient()
     zmq_connect (requester, "tcp://localhost:5555");
     zmq_send (requester, "ping", 4, 0);
 
+    // avoid buffer problems by adding a terminating character at end of command sequence or use a dynamic size buffer that first takes a size param from the program.
     int request_nbr;
     while (1) {
         char buffer [256]; // buffer should match size of message otherwise wonky string things occur.
