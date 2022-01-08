@@ -52,10 +52,10 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         if e.arguments[0][:1] == '!':
             cmd = e.arguments[0].split(' ')[0][1:]
             print ('Received command: ' + cmd)
-            self.do_command(e, cmd)
+            self.do_command(e, cmd, e.arguments[0].split(' '))
         return
 
-    def do_command(self, e, cmd):
+    def do_command(self, e, cmd, args):
         c = self.connection
         # Poll the API to get current game.
         if cmd == "game":
@@ -72,18 +72,20 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             c.privmsg(self.channel, r['display_name'] + ' channel title is currently ' + r['status'])
 
         # Provide basic information to viewers for specific commands
-        elif cmd == "raffle":
-            message = "This is an example bot, replace this text with your raffle text."
-            c.privmsg(self.channel, message)
-        elif cmd == "schedule":
-            message = "This is an example bot, replace this text with your schedule text."            
-            c.privmsg(self.channel, message)
+        # elif cmd == "raffle":
+        #     message = "This is an example bot, replace this text with your raffle text."
+        #     c.privmsg(self.channel, message)
+        # elif cmd == "schedule":
+        #     message = "This is an example bot, replace this text with your schedule text."            
+        #     c.privmsg(self.channel, message)
 
         # The command was not recognized
-        else:
-            c.privmsg(self.channel, "Did not understand command: " + cmd)
+        elif cmd == "spawn":
+            # c.privmsg(self.channel, "Did not understand command: " + cmd)
             print("Send to command queue")
-            self.cvar.command_queue.append(cmd)
+            print(args)
+            cmd = "SP"
+            self.cvar.command_queue.append(cmd + args[1])
 
 def main():
     if len(sys.argv) == 5:

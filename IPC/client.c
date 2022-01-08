@@ -35,9 +35,9 @@ void startClient()
 
     int request_nbr;
     while (1) {
-        char buffer [8]; // buffer should match size of message otherwise wonky string things occur.
+        char buffer [256]; // buffer should match size of message otherwise wonky string things occur.
         printf ("Waiting for input ...\n");
-        zmq_recv (requester, buffer, 8, 0);
+        zmq_recv (requester, buffer, 256, 0);
         // if (zmq_recv)
         relay(buffer);
             

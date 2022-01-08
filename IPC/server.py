@@ -45,6 +45,8 @@ class Server:
                 print("Attempting command transfer")
                 print(encode(self.command_queue))
                 socket.send_string(encode(self.command_queue))
+                print("Clearing command queue.")
+                self.command_queue.clear()
             else:
                 socket.send(b"No commands to send.")
 
