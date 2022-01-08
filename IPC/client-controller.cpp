@@ -9,7 +9,7 @@ void relay(const char* str)
     printf("%s\n", str);
 }
 
-// -lzmq flag for compilation
+// compile with g++ client-controller.cpp -lzmq -pthread
 int main()
 {
     cout << "started!\n";
