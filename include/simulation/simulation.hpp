@@ -14,9 +14,6 @@
 // Notes:
 // Simulation seems to control pretty much everything that goes on. For GUI manipulation, see editor_scene.
 
-// TODO:
-// Command queue.
-
 struct Simulation
 {
 	civ::Vector<Colony> colonies;
