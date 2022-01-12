@@ -2,6 +2,7 @@
 #include <queue>
 // #include <thread>
 #include "../../IPC/client.c"
+#include "client-controller.h"
 using namespace std;
 
 // Try implementing threading after everything is sure to work.

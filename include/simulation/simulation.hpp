@@ -8,6 +8,7 @@
 #include "render/renderer.hpp"
 #include "simulation/world/map_loader.hpp"
 #include "simulation/ant/fight_system.hpp"
+#include "commandQueue.hpp"
 #include "world/async_distance_field_builder.hpp"
 #include <iostream> // For printing debug statements.
 
