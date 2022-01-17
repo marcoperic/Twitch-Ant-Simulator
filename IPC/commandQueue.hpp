@@ -1,7 +1,7 @@
 #include <iostream>
 #include <queue>
 // #include <thread>
-#include "../../IPC/client.c"
+#include "client.c"
 #include "client-controller.h"
 using namespace std;
 
