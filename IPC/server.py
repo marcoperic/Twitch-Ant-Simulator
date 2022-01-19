@@ -9,6 +9,7 @@ import zmq
 import _thread
 
 BUFFER_SIZE = 32 # Update this in C whenever modified.
+UPDATE_INTERVAL = 5 # How many seconds between command transmissions
 
 def encode(cmd_q):
     output = ""
@@ -46,7 +47,7 @@ class Server:
             print("Received request: %s" % message)
 
             # Check to see if object has been populated with commands from user. If greater than one, send commands down pipeline.
-            time.sleep(5)
+            time.sleep(UPDATE_INTERVAL)
             if (len(self.command_queue) > 0):
                 print("Attempting command transfer")
                 print(encode(self.command_queue))
@@ -54,4 +55,4 @@ class Server:
                 print("Clearing command queue.")
                 self.command_queue.clear()
             else:
-                socket.send(b"No commands to send.") # Handle this
+                socket.send(b"-" * BUFFER_SIZE)
