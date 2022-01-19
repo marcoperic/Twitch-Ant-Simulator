@@ -44,6 +44,9 @@ typedef struct client_controller
 void dispatchCommands()
 {
     cout << "Dispatching commands ...\n";
+    // Print out the commands
+    // for (string a: commands)
+    //     cout << a + "\n";
 }
 
 vector<string> split (string s, string delimiter) {
