@@ -14,7 +14,7 @@ void dispatchCommands();
 // Extern C 
 void relay(const char* str)
 {
-    printf("%s\n", str);
+    // printf("%s\n", str);
     getCommands(str);
     dispatchCommands();
 }
@@ -45,8 +45,18 @@ void dispatchCommands()
 {
     cout << "Dispatching commands ...\n";
     // Print out the commands
-    // for (string a: commands)
-    //     cout << a + "\n";
+    for (string a: commands)
+        if (a.at(0) == '-')
+        {
+            cout << "End of command sequence.\n";
+            break;
+        }
+        else
+        {
+            cout << a + "\n";
+        }
+
+    cout << "Command dispatch complete.\n";
 }
 
 vector<string> split (string s, string delimiter) {
@@ -67,7 +77,7 @@ vector<string> split (string s, string delimiter) {
 void getCommands(const char* str)
 {
     string temp(str);
-    vector<string> tokens = split(temp, ";");  
+    vector<string> tokens = split(temp, ";");
     commands = tokens;
 }
 

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "client-controller.h"
+#define BUFFER_SIZE 64 // Be sure to update in Python class.
 
 void startClient()
 {
@@ -15,9 +16,9 @@ void startClient()
     // avoid buffer problems by adding a terminating character at end of command sequence or use a dynamic size buffer that first takes a size param from the program.
     int request_nbr;
     while (1) {
-        char buffer [256]; // buffer should match size of message otherwise wonky string things occur.
+        char buffer [BUFFER_SIZE]; // buffer should match size of message otherwise wonky string things occur.
         printf ("Waiting for input ...\n");
-        zmq_recv (requester, buffer, 256, 0);
+        zmq_recv (requester, buffer, BUFFER_SIZE, 0);
         // if (zmq_recv)
         relay(buffer);
             

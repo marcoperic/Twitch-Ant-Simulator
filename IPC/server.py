@@ -8,10 +8,15 @@ import time
 import zmq
 import _thread
 
+BUFFER_SIZE = 32 # Update this in C whenever modified.
+
 def encode(cmd_q):
     output = ""
     for i in cmd_q:
         output += ("" + str(i) + ";")
+
+    if (len(output) < BUFFER_SIZE):
+        output = output + ("-" * (BUFFER_SIZE - len(output)))
 
     return output
 
@@ -49,7 +54,7 @@ class Server:
                 print("Clearing command queue.")
                 self.command_queue.clear()
             else:
-                socket.send(b"No commands to send.")
+                socket.send(b"No commands to send.") # Handle this
 
 # Uncomment and run to test IPC between C and C++ interfaces.
 # context = zmq.Context()
