@@ -22,9 +22,18 @@ void relay(const char* str)
 
 typedef struct client_controller 
 {
-    int getCommandCount()
+    vector<string> isReady()
     {
-        return commands.size();
+        if (commands.size() == 0)
+            return NULL;
+
+        cout << "Dispatching commands ...\n";
+        commands.pop_back();
+        vector<string> retList = commands;
+        commands.clear();
+        cout << "Command list cleared.\n";
+
+        return retList;
     }
 
     void start_client()
@@ -40,24 +49,6 @@ typedef struct client_controller
     }
 
 }client_controller;
-
-void dispatchCommands()
-{
-    cout << "Dispatching commands ...\n";
-    // Print out the commands
-    for (string a: commands)
-        if (a.at(0) == '-')
-        {
-            cout << "End of command sequence.\n";
-            break;
-        }
-        else
-        {
-            cout << a + "\n";
-        }
-
-    cout << "Command dispatch complete.\n";
-}
 
 vector<string> split (string s, string delimiter) {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
