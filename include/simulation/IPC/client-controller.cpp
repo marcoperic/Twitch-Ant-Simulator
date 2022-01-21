@@ -9,26 +9,37 @@ using namespace std;
 vector<string> commands;
 vector<string> split(string s, string delimiter);
 void getCommands(const char* str);
-void dispatchCommands();
+void debug();
 
 // Extern C 
 void relay(const char* str)
 {
     // printf("%s\n", str);
     getCommands(str);
+    debug();
 }
 // Extern C
+
+void debug()
+{
+    for (string a: commands)
+    {
+        cout << a + "\n";
+    }
+
+    commands.clear();
+    cout << "Cleared command queue.\n";
+}
 
 typedef struct client_controller 
 {
     vector<string> fetch()
     {
         cout << "Dispatching commands ...\n";
-        commands.pop_back();
+        // commands.pop_back();
         vector<string> retList = commands;
         commands.clear();
         cout << "Command list cleared.\n";
-
         return retList;
     }
 
@@ -71,6 +82,7 @@ void getCommands(const char* str)
     string temp(str);
     vector<string> tokens = split(temp, ";");
     commands = tokens;
+    commands.pop_back(); // erase the last element
 }
 
 
