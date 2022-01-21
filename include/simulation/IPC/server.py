@@ -23,6 +23,8 @@ def encode(cmd_q):
 
 class Server:
 
+    colors = {'red': 'r', 'green': 'g', 'blue': 'b', 'purple': 'p'}
+
     def __init__(self):
         self.command_queue = []
         self.command_queue.append('a1')

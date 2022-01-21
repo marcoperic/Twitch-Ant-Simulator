@@ -82,10 +82,15 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         # The command was not recognized
         elif cmd == "spawn":
             # c.privmsg(self.channel, "Did not understand command: " + cmd)
-            print("Send to command queue")
-            print(args)
             cmd = "SP"
-            self.cvar.pushCmd(cmd)
+            if (len(args) > 2):
+                c.privmsg(self.channel, "Too many arguments! Please try !spawn color")
+            else:
+                if (args[1] in self.cvar.colors):
+                    cmd += self.cvar.colors[args[1]]
+                    self.cvar.pushCmd(cmd)
+                else:
+                    c.privmsg(self.channel, "Invalid color. Try another one, or check the colorblind panel below!")
 
 def main():
     if len(sys.argv) == 5:
