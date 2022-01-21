@@ -28,6 +28,8 @@ class Server:
         self.command_queue.append('a1')
         self.command_queue.append('b2')
 
+    def pushCmd(self, cmd):
+        self.command_queue.append(cmd)
 
     def init_threading(self):
         print('Starting threads.')

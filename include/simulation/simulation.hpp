@@ -10,7 +10,9 @@
 #include "simulation/ant/fight_system.hpp"
 #include "commandQueue.hpp"
 #include "world/async_distance_field_builder.hpp"
+#include "IPC/client-controller.h"
 #include "IPC/client-controller.cpp"
+#include <vector>
 #include <iostream> // For printing debug statements.
 
 // Notes:
@@ -26,7 +28,8 @@ struct Simulation
 	FightSystem fight_system;
 	sf::Clock clock;
     AsyncDistanceFieldBuilder distance_field_builder;
-    // client_controller c(this);
+    // UNCOMMENT TO ACTIVATE CLIENT CONTROLLER
+    // client_controller c;
 
     explicit
 	Simulation(sf::Window& window)
@@ -57,11 +60,6 @@ struct Simulation
         return colony_ref;
 	}
 
-    void processCommands(vector<string> commands)
-    {
-
-    }
-
 	void update(float dt)
 	{
         // std::cout << "Update";
@@ -70,10 +68,15 @@ struct Simulation
             removeDeadAnts();
 
             // Get incoming data from queue structure to perform operations based on chat interaction
-            if (c.getCommandCount != 0)
-            {
+            // if (c.isReady())
+            // {
+            //     vector<string> temp = c.fetch();
 
-            }
+            //     for (string cmd: temp)
+            //     {
+            //         cout << cmd + "\n";
+            //     }
+            // }
 
 			// Update world cells (markers, density, walls)
 			world.update(dt);

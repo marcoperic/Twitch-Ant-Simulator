@@ -85,7 +85,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             print("Send to command queue")
             print(args)
             cmd = "SP"
-            self.cvar.command_queue.append(cmd + args[1])
+            self.cvar.pushCmd(cmd)
 
 def main():
     if len(sys.argv) == 5:

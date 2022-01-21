@@ -16,17 +16,13 @@ void relay(const char* str)
 {
     // printf("%s\n", str);
     getCommands(str);
-    dispatchCommands();
 }
 // Extern C
 
 typedef struct client_controller 
 {
-    vector<string> isReady()
+    vector<string> fetch()
     {
-        if (commands.size() == 0)
-            return NULL;
-
         cout << "Dispatching commands ...\n";
         commands.pop_back();
         vector<string> retList = commands;
@@ -34,6 +30,11 @@ typedef struct client_controller
         cout << "Command list cleared.\n";
 
         return retList;
+    }
+
+    bool isReady()
+    {
+        return !commands.empty();
     }
 
     void start_client()
