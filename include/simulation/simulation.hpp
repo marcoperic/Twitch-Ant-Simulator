@@ -71,7 +71,7 @@ struct Simulation
             // if (c.isReady())
             // {
             //     vector<string> temp = c.fetch();
-
+            // 
             //     for (string cmd: temp)
             //     {
             //         cout << cmd + "\n";
