@@ -18,11 +18,12 @@ def encode(cmd_q):
 class Server:
 
     colors = {'red': 'r', 'green': 'g', 'blue': 'b', 'purple': 'p'}
+    events = ('poison', 'candy')
 
     def __init__(self):
         self.command_queue = []
-        self.command_queue.append('a1')
-        self.command_queue.append('b2')
+        self.command_queue.append('test1')
+        self.command_queue.append('test2')
 
     def pushCmd(self, cmd):
         self.command_queue.append(cmd)

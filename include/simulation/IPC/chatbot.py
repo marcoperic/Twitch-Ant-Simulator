@@ -61,15 +61,6 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             r = requests.get(url, headers=headers).json()
             c.privmsg(self.channel, r['display_name'] + ' channel title is currently ' + r['status'])
 
-        # Provide basic information to viewers for specific commands
-        # elif cmd == "raffle":
-        #     message = "This is an example bot, replace this text with your raffle text."
-        #     c.privmsg(self.channel, message)
-        # elif cmd == "schedule":
-        #     message = "This is an example bot, replace this text with your schedule text."            
-        #     c.privmsg(self.channel, message)
-
-        # The command was not recognized
         elif cmd == "spawn":
             # c.privmsg(self.channel, "Did not understand command: " + cmd)
             cmd = "S"
@@ -85,10 +76,25 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         elif cmd == "feed":
             # Spawn food near a certain colony.
             cmd = "F"
+            if (len(args) > 2):
+                c.privmsg(self.channel, "Too many arguments! Please try !feed color")
+            else:
+                if (args[1] in self.cvar.colors):
+                    cmd += self.cvar.colors[args[1]]
+                    self.cvar.pushCmd(cmd)
+                else:
+                    c.privmsg(self.channel, "Too many arguments! Please try !feed color")
+                    
 
         elif cmd == "event":
             # Cause good or bad event near colony.
             cmd = "E"
+
+            if (len(args) > 2):
+                c.privmsg(self.channel, "Too many arguments! Please try !event eventname")
+            else:
+                if (args[1] in self.cvar.events):
+                    print()
 
 def main():
     if len(sys.argv) == 5:
