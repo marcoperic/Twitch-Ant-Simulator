@@ -8,7 +8,6 @@
 #include "render/renderer.hpp"
 #include "simulation/world/map_loader.hpp"
 #include "simulation/ant/fight_system.hpp"
-#include "commandQueue.hpp"
 #include "world/async_distance_field_builder.hpp"
 #include "IPC/client-controller.h"
 #include "IPC/client-controller.cpp"
