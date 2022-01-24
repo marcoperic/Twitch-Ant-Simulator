@@ -28,7 +28,7 @@ struct Simulation
 	sf::Clock clock;
     AsyncDistanceFieldBuilder distance_field_builder;
     // UNCOMMENT TO ACTIVATE CLIENT CONTROLLER
-    // client_controller c;
+    client_controller c;
 
     explicit
 	Simulation(sf::Window& window)

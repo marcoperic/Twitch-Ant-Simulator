@@ -52,7 +52,7 @@ typedef struct client_controller
     {
         cout << "started!\n";
         thread client_connection(startClient);
-        client_connection.join();
+        client_connection.detach(); // necessary to prevent stopping main thread. .join() is wrong.
     }  
 
     explicit client_controller()
@@ -87,9 +87,9 @@ void getCommands(const char* str)
 
 
 // compile with g++ client-controller.cpp -lzmq -pthread
-int main()
-{
-    client_controller c;
-    // start_client();
-    return 0;
-}
+// int main()
+// {
+//     client_controller c;
+//     // start_client();
+//     return 0;
+// }
