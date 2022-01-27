@@ -57,6 +57,11 @@ struct Colony
         }
     }
 
+	sf::Color getColor()
+	{
+		return ants_color;
+	}
+
 	Ant& createWorker()
 	{
 		++ant_creation_id;

@@ -12,10 +12,8 @@
 #include "IPC/client-controller.h"
 #include "IPC/client-controller.cpp"
 #include <vector>
-#include <iostream> // For printing debug statements.
-
-// Notes:
-// Simulation seems to control pretty much everything that goes on. For GUI manipulation, see editor_scene.
+#include <iostream>
+#include <unordered_map>
 
 struct Simulation
 {
@@ -29,6 +27,8 @@ struct Simulation
     AsyncDistanceFieldBuilder distance_field_builder;
     // UNCOMMENT TO ACTIVATE CLIENT CONTROLLER
     client_controller c;
+    unordered_map<sf::Color, string> color_map = initColorMap();
+    unordered_map<string, Colony> colony_map;
 
     explicit
 	Simulation(sf::Window& window)
@@ -37,6 +37,17 @@ struct Simulation
         , distance_field_builder(world.map)
 	{
 	}
+
+    unordered_map<sf::Color, string> initColorMap()
+    {
+        unordered_map<sf::Color, string> temp;
+        temp.emplace(sf::Color::red, "red");
+        temp.emplace(sf::Color::green, "green");
+        temp.emplace(sf::Color::blue, "blue");
+        temp.emplace(sf::Color::cyan, "cyan");
+
+        return temp;
+    }
 
 	void loadMap(const std::string& map_filename)
 	{
@@ -56,8 +67,25 @@ struct Simulation
 		// Register it for the renderer
 		renderer.addColony(colony_ref);
         world.renderer.colonies_color.emplace_back();
+        colony_map.emplace(color_map.find(colony.getColor()), colony) // put the colony in a map that tracks it by color.
+
         return colony_ref;
 	}
+
+    void processCommands(vector<string> commands)
+    {
+        for (string cmd: commands)
+        {
+            if (cmd.at(0) == "S")
+            {
+                string color = cmd.substr(1, cmd.end());
+                // Debug
+                cout << color;
+                Colony c = colony_map.find(color_map.find(color));
+                c.createWorker(); // Create ant for certain colony.
+            }
+        }
+    }
 
 	void update(float dt)
 	{
