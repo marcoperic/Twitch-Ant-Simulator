@@ -13,13 +13,6 @@ float getRandRange(float width);
 float getRandUnder(float width);
 
 
-// Return coordinates within circle of radius r.
-template<typename T>
-sf::Vector2<T> radialNoise(sf::Vector2<T> v, float radius))
-{
-	
-}
-
 template<typename T>
 float getLength2(sf::Vector2<T> v)
 {

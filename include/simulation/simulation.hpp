@@ -11,6 +11,7 @@
 #include "world/async_distance_field_builder.hpp"
 #include "IPC/client-controller.h"
 #include "IPC/client-controller.cpp"
+#include <time.h>
 #include <vector>
 #include <iostream>
 #include <unordered_map>
@@ -19,16 +20,14 @@ struct Simulation
 {
 	civ::Vector<Colony> colonies;
 	World world;
-	// Render
 	Renderer renderer;
 	EventSate ev_state;
 	FightSystem fight_system;
 	sf::Clock clock;
     AsyncDistanceFieldBuilder distance_field_builder;
-    // UNCOMMENT TO ACTIVATE CLIENT CONTROLLER
-    client_controller c;
     unordered_map<sf::Color, string> color_map = initColorMap();
     unordered_map<string, Colony> colony_map;
+    client_controller c;
 
     explicit
 	Simulation(sf::Window& window)
@@ -76,7 +75,7 @@ struct Simulation
     {
         for (string cmd: commands)
         {
-            if (cmd.at(0) == "S")
+            if (cmd.at(0) == "S") // spawn ant
             {
                 string color = cmd.substr(1, cmd.end());
                 // Debug
@@ -84,12 +83,13 @@ struct Simulation
                 Colony c = colony_map.find(color_map.find(color));
                 c.createWorker(); // Create ant for certain colony.
             }
-            else if (cmd.at(0) == "F")
+            else if (cmd.at(0) == "F") // spawn food
             {
                 string color = cmd.substr(1, cmd.end());
                 Colony c = colony_map.find(color_map.find(color));
                 sf::Vector2i coords = c.base.position;
-                world.addFoodAt(coords, 2);
+                sf::Vector2i new_coords = c.radialNoise(coords, 25, time(NULL)) // 25px radius?
+                world.addFoodAt(new_coords, 2); // spawn food at coords
             }
         }
     }

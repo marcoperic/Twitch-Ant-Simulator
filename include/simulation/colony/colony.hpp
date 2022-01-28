@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <list>
+#include <cmath>
+#include <stdlib.h>
 #include "common/utils.hpp"
 #include "colony_base.hpp"
 #include "common/graph.hpp"
@@ -180,4 +182,15 @@ struct Colony
             }
         }
     }
+
+	sf::Vector2<T> radialNoise(sf::Vector2<T> v, float radius, auto rand_seed))
+	{
+		srand(rand_seed);
+		float r = radius * sqrt(rand());
+		theta = rand() * 2 * PI;
+		x = v.x + r * cos(theta);
+		y = v.y + r * sin(theta);
+
+		return sf::Vector2<T>{x, y};
+	}
 };
