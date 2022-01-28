@@ -84,6 +84,13 @@ struct Simulation
                 Colony c = colony_map.find(color_map.find(color));
                 c.createWorker(); // Create ant for certain colony.
             }
+            else if (cmd.at(0) == "F")
+            {
+                string color = cmd.substr(1, cmd.end());
+                Colony c = colony_map.find(color_map.find(color));
+                sf::Vector2i coords = c.base.position;
+                world.addFoodAt(coords, 2);
+            }
         }
     }
 

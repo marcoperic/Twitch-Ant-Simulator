@@ -126,6 +126,3 @@ template<typename T>
 float DefaultConf<T>::GUI_SCALE = 1.0f;
 
 using Conf = DefaultConf<int>;
-
-
-
