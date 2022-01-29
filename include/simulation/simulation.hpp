@@ -25,8 +25,8 @@ struct Simulation
 	FightSystem fight_system;
 	sf::Clock clock;
     AsyncDistanceFieldBuilder distance_field_builder;
-    unordered_map<sf::Color, string> color_map = initColorMap();
-    unordered_map<string, Colony> colony_map;
+    //unordered_map<sf::Color, string> color_map = initColorMap();
+    //unordered_map<string, Colony> colony_map;
     client_controller c;
 
     explicit
@@ -37,16 +37,16 @@ struct Simulation
 	{
 	}
 
-    unordered_map<sf::Color, string> initColorMap()
-    {
-        unordered_map<sf::Color, string> temp;
-        temp.emplace(sf::Color::red, "red");
-        temp.emplace(sf::Color::green, "green");
-        temp.emplace(sf::Color::blue, "blue");
-        temp.emplace(sf::Color::cyan, "cyan");
+    //unordered_map<sf::Color, string> initColorMap()
+    //{
+    //    unordered_map<sf::Color, string> temp;
+    //    temp.emplace(sf::Color::Red, "red");
+    //    temp.emplace(sf::Color::Green, "green");
+    //    temp.emplace(sf::Color::Blue, "blue");
+    //    temp.emplace(sf::Color::Cyan, "cyan");
 
-        return temp;
-    }
+    //    return temp;
+    //}
 
 	void loadMap(const std::string& map_filename)
 	{
@@ -66,32 +66,32 @@ struct Simulation
 		// Register it for the renderer
 		renderer.addColony(colony_ref);
         world.renderer.colonies_color.emplace_back();
-        colony_map.emplace(color_map.find(colony.getColor()), colony) // put the colony in a map that tracks it by color.
+        //colony_map.emplace(color_map.find(colony.getColor()), colony); // put the colony in a map that tracks it by color.
 
         return colony_ref;
 	}
 
     void processCommands(vector<string> commands)
     {
-        for (string cmd: commands)
-        {
-            if (cmd.at(0) == "S") // spawn ant
-            {
-                string color = cmd.substr(1, cmd.end());
-                // Debug
-                cout << color;
-                Colony c = colony_map.find(color_map.find(color));
-                c.createWorker(); // Create ant for certain colony.
-            }
-            else if (cmd.at(0) == "F") // spawn food
-            {
-                string color = cmd.substr(1, cmd.end());
-                Colony c = colony_map.find(color_map.find(color));
-                sf::Vector2i coords = c.base.position;
-                sf::Vector2i new_coords = c.radialNoise(coords, 25, time(NULL)); // 25px radius?
-                world.addFoodAt(new_coords, 2); // spawn food at coords
-            }
-        }
+        //for (string cmd: commands)
+        //{
+        //    if (cmd.at(0) == 'S') // spawn ant
+        //    {
+        //        string color = cmd.substr(1, cmd.size());
+        //        // Debug
+        //        cout << color;
+        //        Colony c = colony_map.find(color_map.find(color));
+        //        c.createWorker(); // Create ant for certain colony.
+        //    }
+        //    else if (cmd.at(0) == 'F') // spawn food
+        //    {
+        //        string color = cmd.substr(1, cmd.size());
+        //        Colony c = colony_map.find(color_map.find(color));
+        //        sf::Vector2i coords = c.base.position;
+        //        sf::Vector2i new_coords = c.radialNoise(coords, 25, time(NULL)); // 25px radius?
+        //        world.addFoodAt(new_coords, 2); // spawn food at coords
+        //    }
+        //}
     }
 
 	void update(float dt)
