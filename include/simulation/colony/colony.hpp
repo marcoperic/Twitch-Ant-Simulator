@@ -4,6 +4,7 @@
 #include <list>
 #include <cmath>
 #include <stdlib.h>
+#include <time.h>
 #include "common/utils.hpp"
 #include "colony_base.hpp"
 #include "common/graph.hpp"
@@ -183,7 +184,7 @@ struct Colony
         }
     }
 
-	sf::Vector2<T> radialNoise(sf::Vector2<T> v, float radius, auto rand_seed))
+	sf::Vector2i radialNoise(sf::Vector2i v, float radius, time_t rand_seed))
 	{
 		srand(rand_seed);
 		float r = radius * sqrt(rand());
@@ -191,6 +192,6 @@ struct Colony
 		x = v.x + r * cos(theta);
 		y = v.y + r * sin(theta);
 
-		return sf::Vector2<T>{x, y};
+		return sf::Vector2i{x, y};
 	}
 };

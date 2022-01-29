@@ -88,7 +88,7 @@ struct Simulation
                 string color = cmd.substr(1, cmd.end());
                 Colony c = colony_map.find(color_map.find(color));
                 sf::Vector2i coords = c.base.position;
-                sf::Vector2i new_coords = c.radialNoise(coords, 25, time(NULL)) // 25px radius?
+                sf::Vector2i new_coords = c.radialNoise(coords, 25, time(NULL)); // 25px radius?
                 world.addFoodAt(new_coords, 2); // spawn food at coords
             }
         }
