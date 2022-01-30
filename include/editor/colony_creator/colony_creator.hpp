@@ -3,6 +3,8 @@
 #include "editor/GUI/button.hpp"
 #include "colony_tool.hpp"
 #include "simulation/simulation.hpp"
+#include <vector>
+#include <iostream>
 
 
 namespace edtr
@@ -34,8 +36,11 @@ struct ColonyCreator : public GUI::NamedContainer
     void createColony()
     {
         if (this->colonies_count < Conf::MAX_COLONIES_COUNT) {
-            auto new_colony = simulation.createColony(50.0f, 50.0f);
+            sf::Color temp;
+            auto new_colony = simulation.createColony(50.0f, 50.0f, colonies_count);
             auto colony_tool = create<ColonyTool>(new_colony, control_state);
+            colony_tool->setColor(temp = assignColor());
+            colony_tool->colony->ants_color = temp;
             colony_tool->on_select = [this](int8_t id){
                 select(id);
             };
@@ -45,11 +50,55 @@ struct ColonyCreator : public GUI::NamedContainer
 
             // Set the correct callback for the remove button
             colony_tool->top_zone->getByName<GUI::Button>("remove")->click_callback = [this, colony_tool](){
+                //resetColor(colony_tool->colony->ants_color);
                 simulation.removeColony(colony_tool->colony->id);
                 this->removeItem(colony_tool);
                 --this->colonies_count;
             };
         }
+    }
+
+    sf::Color assignColor()
+    {
+        if (simulation.colonies.size() == 0)
+            return sf::Color::Red;
+
+        bool colors[4] = {false, false, false, false};
+        for (Colony& c: simulation.colonies)
+        {
+            if (c.ants_color == sf::Color::Red)
+            {
+                colors[0] = true;
+            }
+            else if (c.ants_color == sf::Color::Blue)
+            {
+                colors[1] = true;
+            }
+            else if (c.ants_color == sf::Color::Green)
+            {
+                colors[2] = true;
+            }
+            else if (c.ants_color == sf::Color::Cyan)
+            {
+                colors[3] = true;
+            }
+        }
+
+        int i;
+        for (i = 0; i < 4; i++)
+        {
+            if (colors[i] == false)
+                break;
+        }
+
+        if (i == 1)
+            return sf::Color::Blue;
+        else if (i == 2)
+            return sf::Color::Green;
+        else if (i == 3)
+            return sf::Color::Cyan;
+
+        return sf::Color::Red;
     }
 
     void select(int32_t id)

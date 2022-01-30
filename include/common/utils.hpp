@@ -47,7 +47,7 @@ std::string toStr(T v)
 }
 
 template<typename T>
-T clamp(T value, T min, T max)
+T clampp(T value, T min, T max)
 {
 	return std::max(min, std::min(value, max));
 }

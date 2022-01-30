@@ -16,7 +16,7 @@ void relay(const char* str)
 {
     // printf("%s\n", str);
     getCommands(str);
-    debug();
+    // debug();
 }
 // Extern C
 

@@ -342,7 +342,7 @@ struct Item
     {
         const sf::Vector2f item_size = item->size;
         const sf::Vector2f rel_mouse_position = mouse_position - item->position;
-        return sf::Vector2f(clamp(rel_mouse_position.x, 0.0f, item_size.x), clamp(rel_mouse_position.y, 0.0f, item_size.y));
+        return sf::Vector2f(clampp(rel_mouse_position.x, 0.0f, item_size.x), clampp(rel_mouse_position.y, 0.0f, item_size.y));
     }
     
     void setOffset(sf::Vector2f new_offset)

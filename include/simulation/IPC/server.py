@@ -17,7 +17,7 @@ def encode(cmd_q):
 
 class Server:
 
-    colors = {'red': 'r', 'green': 'g', 'blue': 'b', 'purple': 'p'}
+    colors = {'red': 'r', 'green': 'g', 'blue': 'b', 'cyan': 'c'}
     events = ('poison', 'candy')
 
     def __init__(self):

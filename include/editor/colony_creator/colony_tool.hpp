@@ -93,7 +93,7 @@ struct ColonyTool : GUI::Container
             setColor(color_picker->getColor());
         });
 
-        color_picker->setRandomColor();
+        color_picker->setRandomColor(); // random color
         colony_stats = create<ColonyStats>(colony, control_state);
     }
 

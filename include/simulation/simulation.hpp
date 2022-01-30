@@ -25,8 +25,7 @@ struct Simulation
 	FightSystem fight_system;
 	sf::Clock clock;
     AsyncDistanceFieldBuilder distance_field_builder;
-    //unordered_map<sf::Color, string> color_map = initColorMap();
-    //unordered_map<string, Colony> colony_map;
+    unordered_map<string, Colony> colony_map;
     client_controller c;
 
     explicit
@@ -37,24 +36,13 @@ struct Simulation
 	{
 	}
 
-    //unordered_map<sf::Color, string> initColorMap()
-    //{
-    //    unordered_map<sf::Color, string> temp;
-    //    temp.emplace(sf::Color::Red, "red");
-    //    temp.emplace(sf::Color::Green, "green");
-    //    temp.emplace(sf::Color::Blue, "blue");
-    //    temp.emplace(sf::Color::Cyan, "cyan");
-
-    //    return temp;
-    //}
-
 	void loadMap(const std::string& map_filename)
 	{
 		MapLoader::loadMap(world, map_filename);
         distance_field_builder.requestUpdate();
 	}
 
-	civ::Ref<Colony> createColony(float colony_x, float colony_y)
+	civ::Ref<Colony> createColony(float colony_x, float colony_y, uint32_t count)
 	{
 		// Create the colony object
 		const civ::ID colony_id = colonies.emplace_back(colony_x, colony_y, Conf::ANTS_COUNT);
@@ -73,16 +61,18 @@ struct Simulation
 
     void processCommands(vector<string> commands)
     {
-        //for (string cmd: commands)
-        //{
-        //    if (cmd.at(0) == 'S') // spawn ant
-        //    {
-        //        string color = cmd.substr(1, cmd.size());
-        //        // Debug
-        //        cout << color;
-        //        Colony c = colony_map.find(color_map.find(color));
-        //        c.createWorker(); // Create ant for certain colony.
-        //    }
+        for (string cmd: commands)
+        {
+           cout << cmd << endl;
+           if (cmd.at(0) == 'S') // spawn ant
+           {
+               char color = cmd.at(1);
+               // Debug
+               cout << color << endl;
+               Colony c = findColonyByColor(color);
+               c.createWorker(); // Does not work. Try the 
+               cout << "Spawned ant" << endl;
+           }
         //    else if (cmd.at(0) == 'F') // spawn food
         //    {
         //        string color = cmd.substr(1, cmd.size());
@@ -91,7 +81,24 @@ struct Simulation
         //        sf::Vector2i new_coords = c.radialNoise(coords, 25, time(NULL)); // 25px radius?
         //        world.addFoodAt(new_coords, 2); // spawn food at coords
         //    }
-        //}
+        }
+    }
+
+    Colony findColonyByColor(char s)
+    {
+        sf::Color c;
+        if (s == 'r')
+            c = sf::Color::Red;
+        else if (s == 'b')
+            c = sf::Color::Blue;
+        else if (s == 'g')
+            c = sf::Color::Green;
+        else if (s == 'c')
+            c = sf::Color::Cyan;
+    
+        for (Colony& col: colonies)
+            if (col.ants_color == c)
+                return col;
     }
 
 	void update(float dt)
@@ -102,15 +109,11 @@ struct Simulation
             removeDeadAnts();
 
             // Get incoming data from queue structure to perform operations based on chat interaction
-            // if (c.isReady())
-            // {
-            //     vector<string> temp = c.fetch();
-            // 
-            //     for (string cmd: temp)
-            //     {
-            //         cout << cmd + "\n";
-            //     }
-            // }
+            if (c.isReady())
+            {
+                vector<string> temp = c.fetch();
+                processCommands(temp);
+            }
 
 			// Update world cells (markers, density, walls)
 			world.update(dt);
@@ -125,6 +128,7 @@ struct Simulation
             }
 
 			for (Colony& colony : colonies) {
+                // cout << unsigned(colony.id) << endl; // print the numerical code.
 				colony.genericAntsUpdate(dt, world);
 			}
 			// Then update objectives and world sampling
@@ -177,6 +181,7 @@ struct Simulation
 
     void removeColony(uint8_t colony_id)
     {
+
         for (Colony& c : colonies) {
             c.stopFightsWith(colony_id);
         }
