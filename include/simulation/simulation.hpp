@@ -59,7 +59,7 @@ struct Simulation
         return colony_ref;
 	}
 
-    void processCommands(vector<string> commands)
+    void processCommands(vector<string> commands, float dt)
     {
         for (string cmd: commands)
         {
@@ -68,10 +68,14 @@ struct Simulation
            {
                char color = cmd.at(1);
                // Debug
-               cout << color << endl;
-               Colony c = findColonyByColor(color);
-               c.createWorker(); // Does not work. Try the 
+               Colony& c = findColonyByColor(color); // Finds the correct colony!
+               c.createWorker();
+            //    c.genericAntsUpdate(dt, world);
                cout << "Spawned ant" << endl;
+           }
+           else
+           {
+               return;
            }
         //    else if (cmd.at(0) == 'F') // spawn food
         //    {
@@ -84,7 +88,7 @@ struct Simulation
         }
     }
 
-    Colony findColonyByColor(char s)
+    Colony& findColonyByColor(char s)
     {
         sf::Color c;
         if (s == 'r')
@@ -112,7 +116,13 @@ struct Simulation
             if (c.isReady())
             {
                 vector<string> temp = c.fetch();
-                processCommands(temp);
+                processCommands(temp, dt);
+                temp.clear();
+            }
+            else
+            {
+                vector<string> temp = {};
+                processCommands(temp, dt);
             }
 
 			// Update world cells (markers, density, walls)
