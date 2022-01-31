@@ -73,18 +73,21 @@ struct Simulation
             //    c.genericAntsUpdate(dt, world);
                cout << "Spawned ant" << endl;
            }
+           else if (cmd.at(0) == 'F') // spawn food
+           {
+               char color = cmd.at(1);
+               Colony& c = findColonyByColor(color);
+               sf::Vector2f coords = c.base.position;
+			//    cout << coords.x << endl;
+            //    sf::Vector2f new_coords = c.radialNoise(coords, 5, time(NULL)); // 25px radius?
+			//    cout << new_coords.x << endl;
+			//    sf::Vector2i test({to<int>(new_coords.x), to<int>(new_coords.y)});
+               world.addFoodAt({30, 30}, 10); // spawn food at coords
+           }
            else
            {
                return;
            }
-        //    else if (cmd.at(0) == 'F') // spawn food
-        //    {
-        //        string color = cmd.substr(1, cmd.size());
-        //        Colony c = colony_map.find(color_map.find(color));
-        //        sf::Vector2i coords = c.base.position;
-        //        sf::Vector2i new_coords = c.radialNoise(coords, 25, time(NULL)); // 25px radius?
-        //        world.addFoodAt(new_coords, 2); // spawn food at coords
-        //    }
         }
     }
 

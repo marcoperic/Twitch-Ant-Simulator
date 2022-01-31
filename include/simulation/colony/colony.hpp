@@ -196,14 +196,15 @@ struct Colony
         }
     }
 
-	//sf::Vector2i radialNoise(sf::Vector2i v, float radius, time_t rand_seed)
-	//{
-	//	srand(rand_seed);
-	//	float r = radius * sqrt(rand());
-	//	float theta = rand() * 2 * PI;
-	//	int x = static_cast<int>(v.x + r * cos(theta));
-	//	int y = static_cast<int>(v.y + r * sin(theta));
+	sf::Vector2f radialNoise(sf::Vector2f v, float radius, time_t rand_seed)
+	{
+		srand(rand_seed);
+		float r = radius * sqrt(rand());
+		float theta = rand() * 2 * PI;
+		float x = (v.x + r * cos(theta));
+		float y = (v.y + r * sin(theta));
 
-	//	return sf::Vector2i{x, y};
-	//}
+		return sf::Vector2f({x, y});
+		// return sf::Vector2i{static_cast<int>(x), static_cast<int>(y)};
+	}
 };
