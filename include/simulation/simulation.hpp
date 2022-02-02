@@ -78,11 +78,8 @@ struct Simulation
                char color = cmd.at(1);
                Colony& c = findColonyByColor(color);
                sf::Vector2f coords = c.base.position;
-			//    cout << coords.x << endl;
-            //    sf::Vector2f new_coords = c.radialNoise(coords, 5, time(NULL)); // 25px radius?
-			//    cout << new_coords.x << endl;
-			//    sf::Vector2i test({to<int>(new_coords.x), to<int>(new_coords.y)});
-               world.addFoodAt({30, 30}, 10); // spawn food at coords
+               sf::Vector2f new_coords = c.radialNoise(coords, 125); // 125px radius?
+               world.addFoodAt(new_coords.x, new_coords.y, 10); // spawn food at coords
            }
            else
            {
