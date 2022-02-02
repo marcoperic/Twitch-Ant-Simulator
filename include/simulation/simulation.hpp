@@ -67,16 +67,16 @@ struct Simulation
            if (cmd.at(0) == 'S') // spawn ant
            {
                char color = cmd.at(1);
-               // Debug
-               Colony& c = findColonyByColor(color); // Finds the correct colony!
+               Colony& c = findColonyByColor(color);
+
                c.createWorker();
-            //    c.genericAntsUpdate(dt, world);
                cout << "Spawned ant" << endl;
            }
            else if (cmd.at(0) == 'F') // spawn food
            {
                char color = cmd.at(1);
                Colony& c = findColonyByColor(color);
+
                sf::Vector2f coords = c.base.position;
                sf::Vector2f new_coords = c.radialNoise(coords, 125); // 125px radius?
                world.addFoodAt(new_coords.x, new_coords.y, 10); // spawn food at coords
@@ -99,10 +99,14 @@ struct Simulation
             c = sf::Color::Green;
         else if (s == 'c')
             c = sf::Color::Cyan;
-    
-        for (Colony& col: colonies)
+
+        for (Colony& col : colonies)
+        {
             if (col.ants_color == c)
+            {
                 return col;
+            }
+        }
     }
 
 	void update(float dt)
