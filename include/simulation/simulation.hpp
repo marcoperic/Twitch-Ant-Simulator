@@ -11,23 +11,21 @@
 #include "world/async_distance_field_builder.hpp"
 #include "IPC/client-controller.h"
 #include "IPC/client-controller.cpp"
+#include <time.h>
 #include <vector>
-#include <iostream> // For printing debug statements.
-
-// Notes:
-// Simulation seems to control pretty much everything that goes on. For GUI manipulation, see editor_scene.
+#include <iostream>
+#include <unordered_map>
 
 struct Simulation
 {
 	civ::Vector<Colony> colonies;
 	World world;
-	// Render
 	Renderer renderer;
 	EventSate ev_state;
 	FightSystem fight_system;
 	sf::Clock clock;
     AsyncDistanceFieldBuilder distance_field_builder;
-    // UNCOMMENT TO ACTIVATE CLIENT CONTROLLER
+    unordered_map<string, Colony> colony_map;
     client_controller c;
 
     explicit
@@ -44,7 +42,7 @@ struct Simulation
         distance_field_builder.requestUpdate();
 	}
 
-	civ::Ref<Colony> createColony(float colony_x, float colony_y)
+	civ::Ref<Colony> createColony(float colony_x, float colony_y, uint32_t count)
 	{
 		// Create the colony object
 		const civ::ID colony_id = colonies.emplace_back(colony_x, colony_y, Conf::ANTS_COUNT);
@@ -56,8 +54,71 @@ struct Simulation
 		// Register it for the renderer
 		renderer.addColony(colony_ref);
         world.renderer.colonies_color.emplace_back();
+        //colony_map.emplace(color_map.find(colony.getColor()), colony); // put the colony in a map that tracks it by color.
+
         return colony_ref;
 	}
+
+    void processCommands(vector<string> commands, float dt)
+    {
+        for (string cmd: commands)
+        {
+           cout << cmd << endl;
+           if (cmd.at(0) == 'S') // spawn ant
+           {
+               char color = cmd.at(1);
+               bool found = true;
+               Colony& c = findColonyByColor(color, &found);
+
+               if (!found)
+                continue;
+
+               c.createWorker();
+               cout << "Spawned ant" << endl;
+           }
+           else if (cmd.at(0) == 'F') // spawn food
+           {
+               char color = cmd.at(1);
+               bool found = true;
+               Colony& c = findColonyByColor(color, &found);
+
+               if (!found)
+                continue;
+
+               sf::Vector2f coords = c.base.position;
+               sf::Vector2f new_coords = c.radialNoise(coords, 125); // 125px radius?
+               world.addFoodAt(new_coords.x, new_coords.y, 10); // spawn food at coords
+           }
+           else
+           {
+               return;
+           }
+        }
+    }
+
+    Colony& findColonyByColor(char s, bool *found)
+    {
+        sf::Color c;
+        if (s == 'r')
+            c = sf::Color::Red;
+        else if (s == 'b')
+            c = sf::Color::Blue;
+        else if (s == 'g')
+            c = sf::Color::Green;
+        else if (s == 'c')
+            c = sf::Color::Cyan;
+
+        for (Colony& col : colonies)
+        {
+            if (col.ants_color == c)
+            {
+                return col;
+            }
+        }
+
+		cout << "Colony is not active." << endl;
+        *found = false;
+    }
 
 	void update(float dt)
 	{
@@ -67,15 +128,17 @@ struct Simulation
             removeDeadAnts();
 
             // Get incoming data from queue structure to perform operations based on chat interaction
-            // if (c.isReady())
-            // {
-            //     vector<string> temp = c.fetch();
-            // 
-            //     for (string cmd: temp)
-            //     {
-            //         cout << cmd + "\n";
-            //     }
-            // }
+            if (c.isReady())
+            {
+                vector<string> temp = c.fetch();
+                processCommands(temp, dt);
+                temp.clear();
+            }
+            else
+            {
+                vector<string> temp = {};
+                processCommands(temp, dt);
+            }
 
 			// Update world cells (markers, density, walls)
 			world.update(dt);
@@ -90,6 +153,7 @@ struct Simulation
             }
 
 			for (Colony& colony : colonies) {
+                // cout << unsigned(colony.id) << endl; // print the numerical code.
 				colony.genericAntsUpdate(dt, world);
 			}
 			// Then update objectives and world sampling
@@ -142,6 +206,7 @@ struct Simulation
 
     void removeColony(uint8_t colony_id)
     {
+
         for (Colony& c : colonies) {
             c.stopFightsWith(colony_id);
         }

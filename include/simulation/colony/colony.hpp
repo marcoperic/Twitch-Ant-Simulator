@@ -2,12 +2,18 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <list>
+#include <cmath>
+#include <stdlib.h>
+#include <time.h>
 #include "common/utils.hpp"
 #include "colony_base.hpp"
 #include "common/graph.hpp"
 #include "common/racc.hpp"
 #include "common/index_vector.hpp"
 #include "simulation/ant/ant_updater.hpp"
+#include "common/number_generator.hpp"
+#include <iostream>
+using namespace std;
 
 
 struct Colony
@@ -57,6 +63,11 @@ struct Colony
         }
     }
 
+	sf::Color getColor()
+	{
+		return ants_color;
+	}
+
 	Ant& createWorker()
 	{
 		++ant_creation_id;
@@ -96,6 +107,18 @@ struct Colony
 	bool isNotFull() const
 	{
 		return ants.size() < max_ants_count;
+	}
+
+	void forceful_createNewAnts(float dt)
+	{
+		if (ants_creation_cooldown.updateAutoReset(dt) && isNotFull()) {
+			if (mustCreateSoldier()) {
+				specializeSoldier(createWorker());
+			}
+			else {
+				createWorker();
+			}
+		}
 	}
 
 	void createNewAnts(float dt)
@@ -175,4 +198,14 @@ struct Colony
             }
         }
     }
+
+	sf::Vector2f radialNoise(sf::Vector2f v, float radius)
+	{
+		float rand = RNGf::getRange(0.0f, 1.0f);
+		float r = radius * sqrt(rand);
+		float theta = rand * 2 * PI;
+		float x = (v.x + r * cos(theta));
+		float y = (v.y + r * sin(theta));
+		return sf::Vector2f({x, y});
+	}
 };
