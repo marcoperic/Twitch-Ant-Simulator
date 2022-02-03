@@ -11,10 +11,8 @@
 #include "world/async_distance_field_builder.hpp"
 #include "IPC/client-controller.h"
 #include "IPC/client-controller.cpp"
-#include <time.h>
 #include <vector>
 #include <iostream>
-#include <unordered_map>
 
 struct Simulation
 {
@@ -25,7 +23,6 @@ struct Simulation
 	FightSystem fight_system;
 	sf::Clock clock;
     AsyncDistanceFieldBuilder distance_field_builder;
-    unordered_map<string, Colony> colony_map;
     client_controller c;
 
     explicit
@@ -54,7 +51,6 @@ struct Simulation
 		// Register it for the renderer
 		renderer.addColony(colony_ref);
         world.renderer.colonies_color.emplace_back();
-        //colony_map.emplace(color_map.find(colony.getColor()), colony); // put the colony in a map that tracks it by color.
 
         return colony_ref;
 	}

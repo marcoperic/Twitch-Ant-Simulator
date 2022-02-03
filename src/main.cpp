@@ -6,6 +6,7 @@
 #include "simulation/simulation.hpp"
 #include "editor/editor_scene.hpp"
 
+#define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map_test.png"
 
 int main()
 {
@@ -23,6 +24,7 @@ int main()
 	window.setFramerateLimit(60);
     // Initialize simulation
     Simulation simulation(window);
+    simulation.loadMap(MAP_NAME);
     // simulation.createColony(Conf::WIN_WIDTH / 2 , Conf::WIN_HEIGHT / 2); // Creates a single colony off the rip
     // Create editor scene around it
     GUI::Scene::Ptr scene = create<edtr::EditorScene>(window, simulation);

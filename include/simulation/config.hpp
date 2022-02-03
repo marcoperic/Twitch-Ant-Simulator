@@ -104,7 +104,7 @@ uint32_t DefaultConf<T>::WORLD_WIDTH = 1920;
 template<typename T>
 uint32_t DefaultConf<T>::WORLD_HEIGHT = 1080;
 template<typename T>
-uint32_t DefaultConf<T>::ANTS_COUNT = 3000;
+uint32_t DefaultConf<T>::ANTS_COUNT = 4000; // Maximum per colony.
 template<typename T>
 float DefaultConf<T>::COLONY_SIZE = 20.0f;
 template<typename T>
