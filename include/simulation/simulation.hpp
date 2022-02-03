@@ -67,7 +67,11 @@ struct Simulation
            if (cmd.at(0) == 'S') // spawn ant
            {
                char color = cmd.at(1);
-               Colony& c = findColonyByColor(color);
+               bool found = true;
+               Colony& c = findColonyByColor(color, &found);
+
+               if (!found)
+                continue;
 
                c.createWorker();
                cout << "Spawned ant" << endl;
@@ -75,7 +79,11 @@ struct Simulation
            else if (cmd.at(0) == 'F') // spawn food
            {
                char color = cmd.at(1);
-               Colony& c = findColonyByColor(color);
+               bool found = true;
+               Colony& c = findColonyByColor(color, &found);
+
+               if (!found)
+                continue;
 
                sf::Vector2f coords = c.base.position;
                sf::Vector2f new_coords = c.radialNoise(coords, 125); // 125px radius?
@@ -88,7 +96,7 @@ struct Simulation
         }
     }
 
-    Colony& findColonyByColor(char s)
+    Colony& findColonyByColor(char s, bool *found)
     {
         sf::Color c;
         if (s == 'r')
@@ -107,6 +115,9 @@ struct Simulation
                 return col;
             }
         }
+
+		cout << "Colony is not active." << endl;
+        *found = false;
     }
 
 	void update(float dt)
