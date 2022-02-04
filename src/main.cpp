@@ -6,7 +6,9 @@
 #include "simulation/simulation.hpp"
 #include "editor/editor_scene.hpp"
 
-#define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map_test.png"
+#define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
+
+// MAP LOADING AND SPAWNS CREATED IN COLONY_CREATOR
 
 int main()
 {

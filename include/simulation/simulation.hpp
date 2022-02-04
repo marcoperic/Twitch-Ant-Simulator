@@ -12,7 +12,10 @@
 #include "IPC/client-controller.h"
 #include "IPC/client-controller.cpp"
 #include <vector>
+#include <tuple>
 #include <iostream>
+
+#define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
 
 struct Simulation
 {
@@ -24,6 +27,7 @@ struct Simulation
 	sf::Clock clock;
     AsyncDistanceFieldBuilder distance_field_builder;
     client_controller c;
+    vector<tuple<float, float>> spawnPoints;
 
     explicit
 	Simulation(sf::Window& window)
@@ -35,11 +39,11 @@ struct Simulation
 
 	void loadMap(const std::string& map_filename)
 	{
-		MapLoader::loadMap(world, map_filename);
+		MapLoader::loadMap(world, map_filename, spawnPoints);
         distance_field_builder.requestUpdate();
 	}
 
-	civ::Ref<Colony> createColony(float colony_x, float colony_y, uint32_t count)
+	civ::Ref<Colony> createColony(float colony_x, float colony_y)
 	{
 		// Create the colony object
 		const civ::ID colony_id = colonies.emplace_back(colony_x, colony_y, Conf::ANTS_COUNT);
