@@ -162,6 +162,14 @@ struct Simulation
 				colony.update(dt, world);
 			}
 
+            for (Colony& colony: colonies)
+            {
+                if (Colony.ants.size() == 0)
+                {
+                    removeColony(colony.id);
+                }
+            }
+
             // Verify that commit #af0375701873821ded1be7f431ba4384d99f640e works
             // for (Colony& colony : colonies)
             // {
