@@ -28,6 +28,7 @@ struct Simulation
     AsyncDistanceFieldBuilder distance_field_builder;
     client_controller c;
     vector<tuple<float, float>> spawnPoints;
+    bool isRunning = true;
 
     explicit
 	Simulation(sf::Window& window)
