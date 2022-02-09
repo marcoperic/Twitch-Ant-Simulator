@@ -164,7 +164,7 @@ struct Simulation
 
             for (Colony& colony: colonies)
             {
-                if (Colony.ants.size() == 0)
+                if (colony.ants.size() == 0)
                 {
                     removeColony(colony.id);
                 }

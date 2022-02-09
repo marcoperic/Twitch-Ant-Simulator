@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <fstream>
+#include <iostream>
 #include "simulation/config.hpp"
 #include "simulation/world/distance_field_builder.hpp"
 #include "simulation/simulation.hpp"
@@ -42,6 +43,7 @@ int main()
             window.display();
         }
 
+        cout << "Instance ended ... Going to restart." << endl;
         // Display text here and countdown between maps.
         // At this point, map should be generated or selected from pool.
     }
