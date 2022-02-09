@@ -97,7 +97,6 @@ struct EditorScene : public GUI::Scene
         toolbox->addItem(colonies);
         // Add time controls
         auto time_controls = create<TimeController>();
-        simulation.setTimePtr(time_controls);
         watch(time_controls, [this, time_controls](){
             this->renderer->current_time_state = time_controls->current_state;
             this->control_state.updating = time_controls->current_state == TimeController::State::Play;

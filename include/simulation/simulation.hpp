@@ -29,7 +29,6 @@ struct Simulation
     client_controller c;
     vector<tuple<float, float>> spawnPoints;
     bool isRunning = true;
-    SPtr<TimeController> time_controller_ptr;
 
     explicit
 	Simulation(sf::Window& window)
@@ -241,10 +240,5 @@ struct Simulation
         renderer.colonies.erase(colony_id);
         world.renderer.colonies_color.erase(colony_id);
         world.clearMarkers(colony_id);
-    }
-
-    void setTimePtr(SPtr<TimeController> time)
-    {
-        time_controller_ptr = time;
     }
 };
