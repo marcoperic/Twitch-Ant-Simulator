@@ -161,6 +161,17 @@ struct Simulation
 			for (Colony& colony : colonies) {
 				colony.update(dt, world);
 			}
+
+            // Verify that commit #af0375701873821ded1be7f431ba4384d99f640e works
+            // for (Colony& colony : colonies)
+            // {
+            //     if (colony.ants.size() > 135)
+            //     {
+            //         isRunning = false;
+            //         break;
+            //     }
+            // }
+
 			// Search for fights
 			fight_system.checkForFights(colonies, world);
 			// Update stats
