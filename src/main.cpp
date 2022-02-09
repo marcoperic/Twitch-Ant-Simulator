@@ -6,6 +6,7 @@
 #include "simulation/world/distance_field_builder.hpp"
 #include "simulation/simulation.hpp"
 #include "editor/editor_scene.hpp"
+#include "editor/time_control/time_controller.hpp"
 
 #define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
 
@@ -32,7 +33,6 @@ int main()
         // Create editor scene around it
         GUI::Scene::Ptr scene = create<edtr::EditorScene>(window, simulation);
         scene->resize();
-
         while (simulation.isRunning) // isRunning should be set to false when the win condition is implemented.
         {
             // Update
