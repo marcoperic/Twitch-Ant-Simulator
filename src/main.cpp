@@ -9,6 +9,8 @@
 
 #define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
 
+using namespace edtr;
+
 int main()
 {
     // Load configuration
@@ -32,6 +34,11 @@ int main()
         // Create editor scene around it
         GUI::Scene::Ptr scene = create<edtr::EditorScene>(window, simulation);
         scene->resize();
+        std::shared_ptr<TimeController> timer = scene->getByName<TimeController>("timer");
+
+        // Uncomment to have code run immediately after booting up.
+        //timer->current_state = TimeController::State::Play;
+        //timer->select(TimeController::State::Play);
 
         while (simulation.isRunning) // isRunning should be set to false when the win condition is implemented.
         {

@@ -113,7 +113,7 @@ struct EditorScene : public GUI::Scene
 
         addItem(renderer);
         addItem(toolbox, "Toolbox"); // Comment this out to remove the toolbox from being rendered.
-        addItem(time_controls, "", GUI::Alignment::Right);
+        addItem(time_controls, "timer", GUI::Alignment::Right);
     }
 
     void updateRenderOptions() const
