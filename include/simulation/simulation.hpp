@@ -11,6 +11,7 @@
 #include "world/async_distance_field_builder.hpp"
 #include "IPC/client-controller.h"
 #include "IPC/client-controller.cpp"
+#include "victorystatus.hpp"
 #include <vector>
 #include <tuple>
 #include <iostream>
@@ -28,6 +29,7 @@ struct Simulation
     AsyncDistanceFieldBuilder distance_field_builder;
     client_controller c;
     vector<tuple<float, float>> spawnPoints;
+    VictoryStatus vstat;
     bool isRunning = true;
 
     explicit
@@ -177,14 +179,15 @@ struct Simulation
             }
 
             // Verify that commit #af0375701873821ded1be7f431ba4384d99f640e works
-            // for (Colony& colony : colonies)
-            // {
-            //     if (colony.ants.size() > 135)
-            //     {
-            //         isRunning = false;
-            //         break;
-            //     }
-            // }
+            for (Colony& colony : colonies)
+            {
+                if (colony.ants.size() > 135)
+                {
+                    vstat.winner = colony.getColorString();
+                    isRunning = false;
+                    break;
+                }
+            }
 
 			// Search for fights
 			fight_system.checkForFights(colonies, world);

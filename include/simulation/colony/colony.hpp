@@ -187,6 +187,35 @@ struct Colony
         color_changed = true;
     }
 
+	std::string getColorString()
+	{
+		sf::Color color = ants_color;
+		std::string color_string;
+
+		if (color == sf::Color::Red)
+		{
+			color_string = "red";
+		}
+		else if (color == sf::Color::Green)
+		{
+			color_string = "green";
+		}
+		else if (color == sf::Color::Cyan)
+		{
+			color_string == "cyan";
+		}
+		else if (color == sf::Color::Blue)
+		{
+			color_string = "blue";
+		}
+		else
+		{
+			color_string = "null";
+		}
+
+		return color_string;
+	}
+
     void stopFightsWith(uint8_t colony_id)
     {
         for (Ant& a : ants) {

@@ -10,6 +10,7 @@
 #define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
 
 using namespace edtr;
+using namespace std;
 
 int main()
 {
@@ -20,12 +21,23 @@ int main()
         std::cout << "Configuration file couldn't be found." << std::endl;
     }
 
+    sf::Clock clock;
+    sf::Font myFont;
+    myFont.loadFromFile("res/font.ttf");
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 4;
     int32_t window_style = Conf::USE_FULLSCREEN ? sf::Style::Fullscreen : sf::Style::Default;
 	sf::RenderWindow window(sf::VideoMode(Conf::WIN_WIDTH, Conf::WIN_HEIGHT), "AntSim", window_style, settings);
 	window.setFramerateLimit(60);
 
+    // center text
+    sf::Text text("Ant simulation started! Choose a colony and help them dominate!", myFont, 50);
+    sf::FloatRect textRect = text.getLocalBounds();
+    text.setOrigin(textRect.left + textRect.width / 2.0f,
+        textRect.top + textRect.height / 2.0f);
+    text.setPosition(sf::Vector2f(Conf::WIN_WIDTH / 2.0f, Conf::WIN_HEIGHT / 2.0f));
+    text.setColor(sf::Color::Red);
+    
     while (window.isOpen())
     {
         // Initialize simulation
@@ -35,10 +47,11 @@ int main()
         GUI::Scene::Ptr scene = create<edtr::EditorScene>(window, simulation);
         scene->resize();
         std::shared_ptr<TimeController> timer = scene->getByName<TimeController>("timer");
+        clock.restart();
 
-        // Uncomment to have code run immediately after booting up.
-        //timer->current_state = TimeController::State::Play;
-        //timer->select(TimeController::State::Play);
+        // start simulation immediately after booting up.
+        timer->current_state = TimeController::State::Play;
+        timer->select(TimeController::State::Play);
 
         while (simulation.isRunning) // isRunning should be set to false when the win condition is implemented.
         {
@@ -47,6 +60,25 @@ int main()
             // Render
             window.clear(sf::Color(100, 100, 100));
             scene->render();
+
+            if (clock.getElapsedTime().asMilliseconds() < 5000)
+            {
+                window.draw(text);
+            }
+
+            window.display();
+        }
+
+        text.setString("the winner was the " + simulation.vstat.winner + " colony!");
+        clock.restart();
+        while (clock.getElapsedTime().asMilliseconds() < 5000)
+        {
+            // Update
+            scene->update();
+            // Render
+            window.clear(sf::Color(100, 100, 100));
+            scene->render();
+            window.draw(text);
             window.display();
         }
 
