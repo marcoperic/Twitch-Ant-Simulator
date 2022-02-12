@@ -6,37 +6,25 @@
 #include "simulation/world/distance_field_builder.hpp"
 #include "simulation/simulation.hpp"
 #include "editor/editor_scene.hpp"
+#include "editor/center-text-control.hpp"
 
 #define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
 
 using namespace edtr;
-using namespace std;
+// using namespace std;
 
 int main()
 {
-    // Load configuration
-    if (Conf::loadUserConf()) {
-        std::cout << "Configuration file loaded." << std::endl;
-    } else {
-        std::cout << "Configuration file couldn't be found." << std::endl;
-    }
-
     sf::Clock clock;
-    sf::Font myFont;
-    myFont.loadFromFile("res/font.ttf");
 	sf::ContextSettings settings;
+    sf::Font font;
+    font.loadFromFile("res/font.ttf");
+    TextControl tc;
 	settings.antialiasingLevel = 4;
     int32_t window_style = Conf::USE_FULLSCREEN ? sf::Style::Fullscreen : sf::Style::Default;
 	sf::RenderWindow window(sf::VideoMode(Conf::WIN_WIDTH, Conf::WIN_HEIGHT), "AntSim", window_style, settings);
 	window.setFramerateLimit(60);
 
-    // center text
-    sf::Text text("Ant simulation started! Choose a colony and help them dominate!", myFont, 50);
-    sf::FloatRect textRect = text.getLocalBounds();
-    text.setOrigin(textRect.left + textRect.width / 2.0f,
-        textRect.top + textRect.height / 2.0f);
-    text.setPosition(sf::Vector2f(Conf::WIN_WIDTH / 2.0f, Conf::WIN_HEIGHT / 2.0f));
-    text.setColor(sf::Color::Red);
     
     while (window.isOpen())
     {
@@ -63,13 +51,12 @@ int main()
 
             if (clock.getElapsedTime().asMilliseconds() < 5000)
             {
-                window.draw(text);
+                window.draw(tc.getStartText(font));
             }
 
             window.display();
         }
-
-        text.setString("the winner was the " + simulation.vstat.winner + " colony!");
+        
         clock.restart();
         while (clock.getElapsedTime().asMilliseconds() < 5000)
         {
@@ -78,7 +65,7 @@ int main()
             // Render
             window.clear(sf::Color(100, 100, 100));
             scene->render();
-            window.draw(text);
+            window.draw(tc.getResetText(simulation.vstat.winner, font));
             window.display();
         }
 
