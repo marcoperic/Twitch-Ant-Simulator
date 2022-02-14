@@ -24,20 +24,31 @@ struct ColonyCreator : public GUI::NamedContainer
         , control_state(control_state_)
     {
         root->size_type.y = GUI::Size::FitContent;
-        auto add_button = create<GUI::Button>("Add", [this](){
-            this->createColony();
-        });
-        add_button->setWidth(32.0f, GUI::Size::Fixed);
-        add_button->setHeight(20.0f, GUI::Size::Fixed);
+        // auto add_button = create<GUI::Button>("Add", [this](){
+        //     // this->createColony();
+        //     this->spawnColonies();
+        // });
+
+        this->spawnColonies();
+        // add_button->setWidth(32.0f, GUI::Size::Fixed);
+        // add_button->setHeight(20.0f, GUI::Size::Fixed);
         header->addItem(create<GUI::EmptyItem>());
-        header->addItem(add_button);
+        // header->addItem(add_button);
     }
 
-    void createColony()
+    void spawnColonies()
+    {
+        for (tuple<float, float> col: simulation.spawnPoints)
+        {
+            this->createColony(get<0>(col), get<1>(col));
+        }
+    }
+
+    void createColony(float x, float y)
     {
         if (this->colonies_count < Conf::MAX_COLONIES_COUNT) {
             sf::Color temp;
-            auto new_colony = simulation.createColony(50.0f, 50.0f, colonies_count);
+            auto new_colony = simulation.createColony(x, y);
             auto colony_tool = create<ColonyTool>(new_colony, control_state);
             colony_tool->setColor(temp = assignColor());
             colony_tool->colony->ants_color = temp;

@@ -1,41 +1,75 @@
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <fstream>
+#include <iostream>
 #include "simulation/config.hpp"
 #include "simulation/world/distance_field_builder.hpp"
 #include "simulation/simulation.hpp"
 #include "editor/editor_scene.hpp"
+#include "editor/center-text-control.hpp"
 
+#define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
+
+using namespace edtr;
+// using namespace std;
 
 int main()
 {
-    // Load configuration
-    if (Conf::loadUserConf()) {
-        std::cout << "Configuration file loaded." << std::endl;
-    } else {
-        std::cout << "Configuration file couldn't be found." << std::endl;
-    }
-
+    sf::Clock clock;
 	sf::ContextSettings settings;
+    sf::Font font;
+    font.loadFromFile("res/font.ttf");
+    TextControl tc(font);
 	settings.antialiasingLevel = 4;
     int32_t window_style = Conf::USE_FULLSCREEN ? sf::Style::Fullscreen : sf::Style::Default;
 	sf::RenderWindow window(sf::VideoMode(Conf::WIN_WIDTH, Conf::WIN_HEIGHT), "AntSim", window_style, settings);
 	window.setFramerateLimit(60);
-    // Initialize simulation
-    Simulation simulation(window);
-    // simulation.createColony(Conf::WIN_WIDTH / 2 , Conf::WIN_HEIGHT / 2); // Creates a single colony off the rip
-    // Create editor scene around it
-    GUI::Scene::Ptr scene = create<edtr::EditorScene>(window, simulation);
-    scene->resize();
-    // Main loop
-	while (window.isOpen()) {
-        // Update
-        scene->update();
-        // Render
-        window.clear(sf::Color(100, 100, 100));
-        scene->render();
-        window.display();
-	}
 
+    
+    while (window.isOpen())
+    {
+        // Initialize simulation
+        Simulation simulation(window);
+        simulation.loadMap(MAP_NAME);
+        // Create editor scene around it
+        GUI::Scene::Ptr scene = create<edtr::EditorScene>(window, simulation);
+        scene->resize();
+        std::shared_ptr<TimeController> timer = scene->getByName<TimeController>("timer");
+        clock.restart();
+
+        // start simulation immediately after booting up.
+        timer->current_state = TimeController::State::Play;
+        timer->select(TimeController::State::Play);
+
+        while (simulation.isRunning) // isRunning should be set to false when the win condition is implemented.
+        {
+            // Update
+            scene->update();
+            // Render
+            window.clear(sf::Color(100, 100, 100));
+            scene->render();
+
+            if (clock.getElapsedTime().asMilliseconds() < 5000)
+            {
+                window.draw(tc.getText(simulation.vstat, true));
+            }
+
+            window.display();
+        }
+        
+        clock.restart();
+        while (clock.getElapsedTime().asMilliseconds() < 5000)
+        {
+            // Update
+            scene->update();
+            // Render
+            window.clear(sf::Color(100, 100, 100));
+            scene->render();
+            window.draw(tc.getText(simulation.vstat, false));
+            window.display();
+        }
+
+        cout << "Instance ended ... Going to restart." << endl;
+    }
 	return 0;
 }

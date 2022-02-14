@@ -22,19 +22,31 @@ class Server:
 
     def __init__(self):
         self.command_queue = []
-        self.command_queue.append('test1')
-        self.command_queue.append('test2')
+        # self.command_queue.append('test1')
+        # self.command_queue.append('test2')
 
     def pushCmd(self, cmd):
         self.command_queue.append(cmd)
 
     def init_threading(self):
         print('Starting threads.')
-        _thread.start_new_thread(self.init_connections, ())
-        
+        _thread.start_new_thread(self.init_connections, ()) # Client control
+        _thread.start_new_thread(self.admin_console, ()) # Admin commands
+    
+    def admin_console(self):
+        context = zmq.Context()
+        socket = context.socket(zmq.REP)
+        socket.bind("tcp://*:5454") # Different port
+
+        print('Listening for incoming requests')
+        while True:
+            #  Wait for next request from client
+            message = socket.recv()
+            print("Admin transmission: %s" % message)
+            self.command_queue.append("@" + message.decode('utf-8')) # decode from bytes to str
+            socket.send(b"reply")
 
     def init_connections(self):
-        self.test = 2
         context = zmq.Context()
         socket = context.socket(zmq.REP)
         socket.bind("tcp://*:5555")

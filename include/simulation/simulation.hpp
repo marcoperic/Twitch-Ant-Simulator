@@ -11,10 +11,12 @@
 #include "world/async_distance_field_builder.hpp"
 #include "IPC/client-controller.h"
 #include "IPC/client-controller.cpp"
-#include <time.h>
+#include "victorystatus.hpp"
 #include <vector>
+#include <tuple>
 #include <iostream>
-#include <unordered_map>
+
+#define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
 
 struct Simulation
 {
@@ -25,8 +27,10 @@ struct Simulation
 	FightSystem fight_system;
 	sf::Clock clock;
     AsyncDistanceFieldBuilder distance_field_builder;
-    unordered_map<string, Colony> colony_map;
     client_controller c;
+    vector<tuple<float, float>> spawnPoints;
+    VictoryStatus vstat;
+    bool isRunning = true;
 
     explicit
 	Simulation(sf::Window& window)
@@ -38,11 +42,11 @@ struct Simulation
 
 	void loadMap(const std::string& map_filename)
 	{
-		MapLoader::loadMap(world, map_filename);
+		MapLoader::loadMap(world, map_filename, spawnPoints);
         distance_field_builder.requestUpdate();
 	}
 
-	civ::Ref<Colony> createColony(float colony_x, float colony_y, uint32_t count)
+	civ::Ref<Colony> createColony(float colony_x, float colony_y)
 	{
 		// Create the colony object
 		const civ::ID colony_id = colonies.emplace_back(colony_x, colony_y, Conf::ANTS_COUNT);
@@ -54,7 +58,6 @@ struct Simulation
 		// Register it for the renderer
 		renderer.addColony(colony_ref);
         world.renderer.colonies_color.emplace_back();
-        //colony_map.emplace(color_map.find(colony.getColor()), colony); // put the colony in a map that tracks it by color.
 
         return colony_ref;
 	}
@@ -88,6 +91,16 @@ struct Simulation
                sf::Vector2f coords = c.base.position;
                sf::Vector2f new_coords = c.radialNoise(coords, 125); // 125px radius?
                world.addFoodAt(new_coords.x, new_coords.y, 10); // spawn food at coords
+           }
+           else if (cmd.at(0) == '@')
+           {
+               string command = cmd.substr(1);
+               if (command == "restart")
+               {
+                   vstat.interrupted = true;
+                   isRunning = false;
+                   break;
+               }
            }
            else
            {
@@ -160,6 +173,33 @@ struct Simulation
 			for (Colony& colony : colonies) {
 				colony.update(dt, world);
 			}
+
+            for (Colony& colony: colonies)
+            {
+                if (colony.ants.size() == 0)
+                {
+                    removeColony(colony.id);
+                }
+            }
+
+            if (colonies.size() == 1)
+            {
+                // Only one colony left? End simulation.
+                //vstat.winner = colonies.get(0).getColorString();
+                isRunning = false;
+            }
+
+            // Verify that commit #af0375701873821ded1be7f431ba4384d99f640e works
+            // for (Colony& colony : colonies)
+            // {
+            //     if (colony.ants.size() > 135)
+            //     {
+            //         vstat.winner = colony.getColorString();
+            //         isRunning = false;
+            //         break;
+            //     }
+            // }
+
 			// Search for fights
 			fight_system.checkForFights(colonies, world);
 			// Update stats

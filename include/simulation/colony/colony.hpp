@@ -109,18 +109,6 @@ struct Colony
 		return ants.size() < max_ants_count;
 	}
 
-	void forceful_createNewAnts(float dt)
-	{
-		if (ants_creation_cooldown.updateAutoReset(dt) && isNotFull()) {
-			if (mustCreateSoldier()) {
-				specializeSoldier(createWorker());
-			}
-			else {
-				createWorker();
-			}
-		}
-	}
-
 	void createNewAnts(float dt)
 	{
 		const float ant_cost = 4.0f;
@@ -186,6 +174,35 @@ struct Colony
         ants_color = color;
         color_changed = true;
     }
+
+	std::string getColorString()
+	{
+		sf::Color color = ants_color;
+		std::string color_string;
+
+		if (color == sf::Color::Red)
+		{
+			color_string = "red";
+		}
+		else if (color == sf::Color::Green)
+		{
+			color_string = "green";
+		}
+		else if (color == sf::Color::Cyan)
+		{
+			color_string == "cyan";
+		}
+		else if (color == sf::Color::Blue)
+		{
+			color_string = "blue";
+		}
+		else
+		{
+			color_string = "null";
+		}
+
+		return color_string;
+	}
 
     void stopFightsWith(uint8_t colony_id)
     {
