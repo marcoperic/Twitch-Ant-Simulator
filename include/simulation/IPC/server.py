@@ -43,7 +43,7 @@ class Server:
             #  Wait for next request from client
             message = socket.recv()
             print("Admin transmission: %s" % message)
-            self.command_queue.append("@" + message)
+            self.command_queue.append("@" + message.decode('utf-8')) # decode from bytes to str
             socket.send(b"reply")
 
     def init_connections(self):

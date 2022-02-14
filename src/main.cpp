@@ -19,7 +19,7 @@ int main()
 	sf::ContextSettings settings;
     sf::Font font;
     font.loadFromFile("res/font.ttf");
-    TextControl tc;
+    TextControl tc(font);
 	settings.antialiasingLevel = 4;
     int32_t window_style = Conf::USE_FULLSCREEN ? sf::Style::Fullscreen : sf::Style::Default;
 	sf::RenderWindow window(sf::VideoMode(Conf::WIN_WIDTH, Conf::WIN_HEIGHT), "AntSim", window_style, settings);
@@ -51,7 +51,7 @@ int main()
 
             if (clock.getElapsedTime().asMilliseconds() < 5000)
             {
-                window.draw(tc.getStartText(font));
+                window.draw(tc.getText(simulation.vstat, true));
             }
 
             window.display();
@@ -65,32 +65,11 @@ int main()
             // Render
             window.clear(sf::Color(100, 100, 100));
             scene->render();
-            window.draw(tc.getResetText(simulation.vstat.winner, font));
+            window.draw(tc.getText(simulation.vstat, false));
             window.display();
         }
 
         cout << "Instance ended ... Going to restart." << endl;
-        // Display text here and countdown between maps.
-        // At this point, map should be generated or selected from pool.
     }
-
-    // LEGACY GAME LOOP
-    
-    // // Initialize simulation
-    // Simulation simulation(window);
-    // simulation.loadMap(MAP_NAME);
-    // // Create editor scene around it
-    // GUI::Scene::Ptr scene = create<edtr::EditorScene>(window, simulation);
-    // scene->resize();
-    // // Main loop
-	// while (window.isOpen()) {
-    //     // Update
-    //     scene->update();
-    //     // Render
-    //     window.clear(sf::Color(100, 100, 100));
-    //     scene->render();
-    //     window.display();
-	// }
-
 	return 0;
 }

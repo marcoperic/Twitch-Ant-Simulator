@@ -92,6 +92,16 @@ struct Simulation
                sf::Vector2f new_coords = c.radialNoise(coords, 125); // 125px radius?
                world.addFoodAt(new_coords.x, new_coords.y, 10); // spawn food at coords
            }
+           else if (cmd.at(0) == '@')
+           {
+               string command = cmd.substr(1);
+               if (command == "restart")
+               {
+                   vstat.interrupted = true;
+                   isRunning = false;
+                   break;
+               }
+           }
            else
            {
                return;
@@ -175,19 +185,20 @@ struct Simulation
             if (colonies.size() == 1)
             {
                 // Only one colony left? End simulation.
+                //vstat.winner = colonies.get(0).getColorString();
                 isRunning = false;
             }
 
             // Verify that commit #af0375701873821ded1be7f431ba4384d99f640e works
-            for (Colony& colony : colonies)
-            {
-                if (colony.ants.size() > 135)
-                {
-                    vstat.winner = colony.getColorString();
-                    isRunning = false;
-                    break;
-                }
-            }
+            // for (Colony& colony : colonies)
+            // {
+            //     if (colony.ants.size() > 135)
+            //     {
+            //         vstat.winner = colony.getColorString();
+            //         isRunning = false;
+            //         break;
+            //     }
+            // }
 
 			// Search for fights
 			fight_system.checkForFights(colonies, world);

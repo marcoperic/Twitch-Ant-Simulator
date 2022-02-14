@@ -2,6 +2,7 @@
 
 struct VictoryStatus
 {
+    bool interrupted;
     std::string winner;
     sf::Color color;
 
@@ -15,5 +16,6 @@ struct VictoryStatus
     {
         winner = "";
         color = sf::Color::Black;
+        interrupted = false;
     }
 };
