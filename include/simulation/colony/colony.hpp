@@ -109,18 +109,6 @@ struct Colony
 		return ants.size() < max_ants_count;
 	}
 
-	void forceful_createNewAnts(float dt)
-	{
-		if (ants_creation_cooldown.updateAutoReset(dt) && isNotFull()) {
-			if (mustCreateSoldier()) {
-				specializeSoldier(createWorker());
-			}
-			else {
-				createWorker();
-			}
-		}
-	}
-
 	void createNewAnts(float dt)
 	{
 		const float ant_cost = 4.0f;

@@ -3,7 +3,7 @@ context = zmq.Context()
 
 print("Connecting to command dispatch ...")
 socket = context.socket(zmq.REQ)
-socket.connect("tcp://localhost:5555")
+socket.connect("tcp://localhost:5454")
 
 while True:
     cmd = input('enter command')

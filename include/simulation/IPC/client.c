@@ -3,7 +3,7 @@
 #include <stdio.h>
 // #include <unistd.h>
 #include "client-controller.h"
-#define BUFFER_SIZE 64 // Be sure to update in Python class.
+#define BUFFER_SIZE 32 // Be sure to update in Python class.
 
 void startClient()
 {
