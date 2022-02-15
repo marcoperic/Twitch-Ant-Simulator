@@ -1,6 +1,6 @@
 # AntSimulator
 
-Ant simulator to be controlled by web interface. (soon!)
+Ant simulator controlled by Twitch chat.
 
 # Installation
 
