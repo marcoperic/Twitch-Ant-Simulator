@@ -9,6 +9,7 @@
 #include "editor/center-text-control.hpp"
 
 #define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
+using namespace edtr;
 
 int main()
 {

@@ -38,7 +38,7 @@ struct TextControl
 
     sf::Text getStartText()
     {
-        sf::Text text("Ant simulation started! Choose a colony and help them dominate!", myFont, 50);
+        sf::Text text("Simulation started! Enter commands in chat and coordinate with each other to help a colony win!", myFont, 32);
         sf::FloatRect textRect = text.getLocalBounds();
         text.setOrigin(textRect.left + textRect.width / 2.0f,
             textRect.top + textRect.height / 2.0f);

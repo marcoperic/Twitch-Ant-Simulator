@@ -7,7 +7,7 @@
 
 void startClient()
 {
-    printf ("Connecting to hello world server…\n");
+    printf ("Connecting to Twitch IRC server\n");
     void *context = zmq_ctx_new ();
     void *requester = zmq_socket (context, ZMQ_REQ);
     zmq_connect (requester, "tcp://localhost:5555");
