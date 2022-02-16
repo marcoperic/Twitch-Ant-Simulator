@@ -10,9 +10,6 @@
 
 #define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
 
-using namespace edtr;
-// using namespace std;
-
 int main()
 {
     sf::Clock clock;
