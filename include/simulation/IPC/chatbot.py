@@ -14,11 +14,12 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         self.channel = '#' + channel
         self.cvar = Server()
 
-        # Get the channel id, we will need this for v5 API calls
-        url = 'https://api.twitch.tv/kraken/users?login=' + channel
-        headers = {'Client-ID': client_id, 'Accept': 'application/vnd.twitchtv.v5+json'}
+        # Get the channel id for v6 Helix auth
+        url = 'https://api.twitch.tv/helix/users?login=' + channel
+        headers = {'Client-ID': client_id, 'Authorization': 'Bearer ' + token}
         r = requests.get(url, headers=headers).json()
-        self.channel_id = r['users'][0]['_id']
+        self.channel_id = r['data'][0]['id']
+        # print(self.channel_id)
 
         # Create IRC bot connection
         server = 'irc.chat.twitch.tv'
@@ -45,6 +46,11 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             self.do_command(e, cmd, e.arguments[0].split(' '))
         return
 
+    # def create_poll(self):
+    #     url = "https://api.twitch.tv/helix/polls"
+    #     headers = {'Client-ID': self.client_id, 'title': "test", 'choices':['op1', 'op2'], 'choice.title': 'what?', 'duration': 15}
+    #     r = requests.post(url, headers)
+
     def do_command(self, e, cmd, args):
         c = self.connection
         # Poll the API to get current game.
@@ -64,8 +70,8 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         elif cmd == "spawn":
             # c.privmsg(self.channel, "Did not understand command: " + cmd)
             cmd = "S"
-            if (len(args) > 2):
-                c.privmsg(self.channel, "Too many arguments! Please try !spawn color")
+            if (len(args) > 2 or len(args) == 1):
+                c.privmsg(self.channel, "Please try !spawn color")
             else:
                 if (args[1] in self.cvar.colors):
                     cmd += self.cvar.colors[args[1]]
@@ -103,13 +109,15 @@ def main():
 
     username  = 'mperic_chatbot'
     client_id = 'gp762nuuoqcoxypju8c569th9wz7q5'
-    token     = '57mmemwwnb0p1b6z366fv1cuw1tb03'
+    token     = '3af8zd1ck6m6ddiq5qnf9zcugbjb34'
     channel   = 'mperic'
 
     
     bot = TwitchBot(username, client_id, token, channel)
     bot.cvar.init_threading()
     bot.start()
+    
+    bot.create_poll()
 
 if __name__ == "__main__":
     main()
