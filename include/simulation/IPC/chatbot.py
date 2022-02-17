@@ -19,7 +19,6 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         headers = {'Client-ID': client_id, 'Authorization': 'Bearer ' + token}
         r = requests.get(url, headers=headers).json()
         self.channel_id = r['data'][0]['id']
-        # print(self.channel_id)
 
         # Create IRC bot connection
         server = 'irc.chat.twitch.tv'
@@ -46,10 +45,12 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             self.do_command(e, cmd, e.arguments[0].split(' '))
         return
 
-    # def create_poll(self):
-    #     url = "https://api.twitch.tv/helix/polls"
-    #     headers = {'Client-ID': self.client_id, 'title': "test", 'choices':['op1', 'op2'], 'choice.title': 'what?', 'duration': 15}
-    #     r = requests.post(url, headers)
+    def create_poll(self):
+        url = 'https://api.twitch.tv/helix/polls'
+        headers = {'Client-ID': self.client_id, 'Authorization': 'Bearer ' + self.token, 'Content-Type': 'application/json'}
+        data = { "broadcaster_id":self.channel_id, "title":"Heads or Tails?", "choices":[{ "title":"Heads" }, { "title":"Tails" }], "channel_points_voting_enabled":True, "channel_points_per_vote":100, "duration":1800 }
+        r = requests.post(url=url, headers=headers, json=data).json()
+        # print(r)
 
     def do_command(self, e, cmd, args):
         c = self.connection
@@ -107,17 +108,17 @@ def main():
         print("Usage: twitchbot <username> <client id> <token> <channel>")
         sys.exit(1)
 
+
+    #refresh token 18yok3pd703svpr6xqule44kq4axh3g4z4clamjoyhw26zzhol
     username  = 'mperic_chatbot'
     client_id = 'gp762nuuoqcoxypju8c569th9wz7q5'
-    token     = '3af8zd1ck6m6ddiq5qnf9zcugbjb34'
+    token     = 'eq7ozpx0kamhe6pwl6igeb5vo87u7c'
     channel   = 'mperic'
 
     
     bot = TwitchBot(username, client_id, token, channel)
     bot.cvar.init_threading()
     bot.start()
-    
-    bot.create_poll()
 
 if __name__ == "__main__":
     main()
