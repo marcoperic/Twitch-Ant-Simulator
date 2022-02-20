@@ -90,7 +90,8 @@ class Server:
             #  Wait for next request from client
             message = socket.recv()
             print("Received request: %s" % message)
-            message = message.decode('utf-8')
+            message = message.decode('UTF-8')
+            print(message)
 
             if (message == '1'):
                 print('Attempting to start poll')

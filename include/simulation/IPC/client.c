@@ -6,7 +6,7 @@
 #define BUFFER_SIZE 32 // Be sure to update in Python class.
 
 // 1 = start poll
-char *server_code = NULL;
+char* server_code = NULL;
 
 void startClient()
 {
@@ -27,7 +27,7 @@ void startClient()
 
         if (server_code != NULL)
         {
-            zmq_send (requester, server_code, sizeof(server_code), 0); //sizeof cause problems
+            zmq_send (requester, server_code, strlen(server_code), 0); //sizeof cause problems
         }
         else
         {
@@ -35,6 +35,7 @@ void startClient()
         }
         // relay(buffer);
 
+        free(server_code);
         server_code = NULL;
     }
     zmq_close (requester);

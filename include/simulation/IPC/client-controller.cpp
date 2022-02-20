@@ -46,8 +46,11 @@ typedef struct client_controller
 
     void server_Create_Poll(string active_colonies) // c_str() for str to char*
     {
-        strcpy(server_code, active_colonies.c_str());
-        cout << "Relaying create poll to server." << endl;
+        const char* temp = active_colonies.c_str();
+        server_code = (char*)malloc(strlen(temp));
+        strcpy(server_code, temp);
+        printf("%s\n", server_code);
+        // cout << "Relaying create poll to server." << endl;
     }
 
     bool isReady()
