@@ -24,7 +24,7 @@ void relay(const char* str)
 void server_Create_Poll(string active_colonies) // c_str() for str to char*
 {
     strcpy(server_code, active_colonies.c_str());
-    cout << "Relaying code 1 to server."
+    cout << "Relaying code 1 to server." << endl;
 }
 
 void debug()

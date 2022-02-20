@@ -25,11 +25,9 @@ void startClient()
         // if (zmq_recv)
         relay(buffer);
 
-        if (code != NULL)
+        if (server_code != NULL)
         {
-            char *s = malloc(sizeof(char) + 1);
-            strcpy(s, itoa(code));
-            zmq_send (requester, s, 2, 0);
+            zmq_send (requester, server_code, sizeof(server_code), 0); //sizeof cause problems
         }
         else
         {
@@ -37,7 +35,7 @@ void startClient()
         }
         // relay(buffer);
 
-        code = 0;
+        server_code = NULL;
     }
     zmq_close (requester);
     zmq_ctx_destroy (context);
