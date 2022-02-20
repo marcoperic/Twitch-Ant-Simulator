@@ -190,15 +190,17 @@ struct Simulation
             }
 
             // Verify that commit #af0375701873821ded1be7f431ba4384d99f640e works
-            // for (Colony& colony : colonies)
-            // {
-            //     if (colony.ants.size() > 135)
-            //     {
-            //         vstat.winner = colony.getColorString();
-            //         isRunning = false;
-            //         break;
-            //     }
-            // }
+            for (Colony& colony : colonies)
+            {
+                if (colony.ants.size() > 135 && colony.ants_color == sf::Color::Red)
+                {
+                    // vstat.winner = colony.getColorString();
+                    // isRunning = false;
+                    // break;
+
+                    c.server_Create_Poll("rgbc");
+                }
+            }
 
 			// Search for fights
 			fight_system.checkForFights(colonies, world);

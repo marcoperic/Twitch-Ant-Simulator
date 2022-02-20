@@ -21,12 +21,6 @@ void relay(const char* str)
 }
 // Extern C
 
-void server_Create_Poll(string active_colonies) // c_str() for str to char*
-{
-    strcpy(server_code, active_colonies.c_str());
-    cout << "Relaying code 1 to server." << endl;
-}
-
 void debug()
 {
     for (string a: commands)
@@ -48,6 +42,12 @@ typedef struct client_controller
         commands.clear();
         cout << "Command list cleared.\n";
         return retList;
+    }
+
+    void server_Create_Poll(string active_colonies) // c_str() for str to char*
+    {
+        strcpy(server_code, active_colonies.c_str());
+        cout << "Relaying create poll to server." << endl;
     }
 
     bool isReady()
