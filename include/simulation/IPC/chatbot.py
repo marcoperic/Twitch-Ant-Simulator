@@ -12,7 +12,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         self.client_id = client_id
         self.token = token
         self.channel = '#' + channel
-        self.cvar = Server()
+        self.cvar = Server(self)
 
         # Get the channel id for v6 Helix auth
         url = 'https://api.twitch.tv/helix/users?login=' + channel
@@ -45,10 +45,16 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             self.do_command(e, cmd, e.arguments[0].split(' '))
         return
 
-    def create_poll(self):
+    def create_poll(self, polldata):
         url = 'https://api.twitch.tv/helix/polls'
         headers = {'Client-ID': self.client_id, 'Authorization': 'Bearer ' + self.token, 'Content-Type': 'application/json'}
-        data = { "broadcaster_id":self.channel_id, "title":"Heads or Tails?", "choices":[{ "title":"Heads" }, { "title":"Tails" }], "channel_points_voting_enabled":True, "channel_points_per_vote":100, "duration":1800 }
+        data = {}
+        
+        if (polldata):
+            data = { "broadcaster_id":self.channel_id, "title": polldata['title'], "choices": polldata['choices'], "channel_points_voting_enabled":True, "channel_points_per_vote":100, "duration":1800 }
+        else:
+            data = { "broadcaster_id":self.channel_id, "title":"Heads or Tails?", "choices":[{ "title":"Heads" }, { "title":"Tails" }], "channel_points_voting_enabled":True, "channel_points_per_vote":100, "duration":1800 }
+        
         r = requests.post(url=url, headers=headers, json=data).json()
         # print(r)
 

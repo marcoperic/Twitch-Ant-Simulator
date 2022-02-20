@@ -20,6 +20,12 @@ void relay(const char* str)
 }
 // Extern C
 
+void server_Create_Poll()
+{
+    code = 1;
+    cout << "Relaying code 1 to server."
+}
+
 void debug()
 {
     for (string a: commands)

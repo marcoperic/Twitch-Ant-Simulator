@@ -1,9 +1,12 @@
 #include <zmq.h>
 #include <string.h>
 #include <stdio.h>
-// #include <unistd.h>
+#include <stdlib.h>
 #include "client-controller.h"
 #define BUFFER_SIZE 32 // Be sure to update in Python class.
+
+// 1 = start poll
+int code = 0;
 
 void startClient()
 {
@@ -21,9 +24,13 @@ void startClient()
         zmq_recv (requester, buffer, BUFFER_SIZE, 0);
         // if (zmq_recv)
         relay(buffer);
-            
-        zmq_send (requester, "ping", 4, 0);
+
+        char *s = malloc(sizeof(char) + 1);
+        strcpy(s, itoa(code));
+        zmq_send (requester, s, 4, 0);
         // relay(buffer);
+
+        code = 0;
     }
     zmq_close (requester);
     zmq_ctx_destroy (context);
