@@ -20,9 +20,9 @@ void relay(const char* str)
 }
 // Extern C
 
-void server_Create_Poll()
+void server_Create_Poll(string active_colonies) // c_str() for str to char*
 {
-    code = 1;
+    strcpy(server_code, active_colonies.c_str());
     cout << "Relaying code 1 to server."
 }
 

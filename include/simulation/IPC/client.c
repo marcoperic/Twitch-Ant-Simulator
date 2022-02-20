@@ -6,7 +6,7 @@
 #define BUFFER_SIZE 32 // Be sure to update in Python class.
 
 // 1 = start poll
-int code = 0;
+char *server_code = NULL;
 
 void startClient()
 {
@@ -25,9 +25,16 @@ void startClient()
         // if (zmq_recv)
         relay(buffer);
 
-        char *s = malloc(sizeof(char) + 1);
-        strcpy(s, itoa(code));
-        zmq_send (requester, s, 4, 0);
+        if (code != NULL)
+        {
+            char *s = malloc(sizeof(char) + 1);
+            strcpy(s, itoa(code));
+            zmq_send (requester, s, 2, 0);
+        }
+        else
+        {
+            zmq_send(requester, "ping", 4, 0);
+        }
         // relay(buffer);
 
         code = 0;
