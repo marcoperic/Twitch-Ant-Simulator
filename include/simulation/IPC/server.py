@@ -93,7 +93,7 @@ class Server:
             message = message.decode('UTF-8')
             print(message)
 
-            if (message == '1'):
+            if (message[0] == '_'):
                 print('Attempting to start poll')
                 # startPoll(poll_codes[getRandomCode()])
                 self.startPoll(poll_codes[0])
