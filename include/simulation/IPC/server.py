@@ -1,6 +1,4 @@
 import time
-
-from matplotlib import colors
 import zmq
 import _thread
 import random
