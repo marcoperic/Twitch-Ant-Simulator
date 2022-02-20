@@ -8,6 +8,7 @@ using namespace std;
 
 vector<string> commands;
 vector<string> split(string s, string delimiter);
+void server_Create_Poll(string active_colonies);
 void getCommands(const char* str);
 void debug();
 
