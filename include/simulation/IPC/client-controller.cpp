@@ -15,9 +15,7 @@ void debug();
 // Extern C 
 void relay(const char* str)
 {
-    // printf("%s\n", str);
     getCommands(str);
-    // debug();
 }
 // Extern C
 
@@ -94,12 +92,3 @@ void getCommands(const char* str)
     commands = tokens;
     commands.pop_back(); // erase the last element
 }
-
-
-// compile with g++ client-controller.cpp -lzmq -pthread
-// int main()
-// {
-//     client_controller c;
-//     // start_client();
-//     return 0;
-// }

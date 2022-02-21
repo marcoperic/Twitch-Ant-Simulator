@@ -7,6 +7,8 @@ import _thread
 
 from server import Server
 
+POLL_DURATION = 60
+
 class TwitchBot(irc.bot.SingleServerIRCBot):
     def __init__(self, username, client_id, token, channel):
         self.client_id = client_id
@@ -51,12 +53,30 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         data = {}
         
         if (polldata):
-            data = { "broadcaster_id":self.channel_id, "title": polldata['title'], "choices": polldata['choices'], "channel_points_voting_enabled":True, "channel_points_per_vote":100, "duration":1800 }
+            data = { "broadcaster_id":self.channel_id, "title": polldata['title'], "choices": polldata['choices'], "channel_points_voting_enabled":True, "channel_points_per_vote":100, "duration":POLL_DURATION }
         else:
-            data = { "broadcaster_id":self.channel_id, "title":"Heads or Tails?", "choices":[{ "title":"Heads" }, { "title":"Tails" }], "channel_points_voting_enabled":True, "channel_points_per_vote":100, "duration":1800 }
+            data = { "broadcaster_id":self.channel_id, "title":"Sample poll", "choices":[{ "title":"First" }, { "title":"Second" }], "channel_points_voting_enabled":True, "channel_points_per_vote":100, "duration":POLL_DURATION }
         
         r = requests.post(url=url, headers=headers, json=data).json()
-        # print(r)
+        print(r)
+
+        # Create thread to wait for poll to finish and then send command to client.
+        _thread.start_new_thread(self.handlePollResult, ())
+
+
+    def handlePollResult(self):
+        print('Poll handler opened.')
+        time.sleep(POLL_DURATION + 20) # Add 20 seconds to account for any API delays, etc...
+        url = 'https://api.twitch.tv/helix/polls'
+        headers = {'Client-ID': self.client_id, 'Authorization': 'Bearer ' + self.token}
+        r = requests.get(url=url, headers=headers).json()
+        print(r)
+
+        # Do work here. 
+
+        self.cvar.poll_info.clear()
+        return # Return silent terminates thread.
+
 
     def do_command(self, e, cmd, args):
         c = self.connection

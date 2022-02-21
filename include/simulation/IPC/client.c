@@ -5,7 +5,6 @@
 #include "client-controller.h"
 #define BUFFER_SIZE 32 // Be sure to update in Python class.
 
-// 1 = start poll
 char* server_code = NULL;
 
 void startClient()

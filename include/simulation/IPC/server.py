@@ -19,7 +19,7 @@ def encode(cmd_q):
 
     return output
         
-def getColonies(str):
+def getColonies(str, colors):
     colonies = []
     for c in str:
         if (c in colors.values()):
@@ -43,19 +43,16 @@ class Server:
     def pushCmd(self, cmd):
         self.command_queue.append(cmd)
     
-    # Code should show which colonies are eligible to receive the modifier.
-    # Try format like: s100_rgbc For spawn 100 for the following colonies
-    def startPoll(self, code):
+    def startPoll(self, code, cols):
         if (len(self.poll_info) > 0): # We already have active poll data
             return
 
         poll_data = {}
-        tokens = code.split('_')
-        type = tokens[0][0]
-        colonies = getColonies(tokens[1])
+        type = code
+        colonies = getColonies(cols, self.colors)
     
         if (type == 's'):
-            quantity = int(tokens[0][1:])
+            quantity = 250 # Spawn 250 ants
             self.poll_info.append('spawn_' + quantity)
             poll_data = {'title': 'Vote for a colony to spawn ' + quantity + ' ants!',
                          'choices' : colonies}
@@ -95,8 +92,9 @@ class Server:
 
             if (message[0] == '_'):
                 print('Attempting to start poll')
-                # startPoll(poll_codes[getRandomCode()])
-                self.startPoll(poll_codes[0])
+                cols = message[1:]
+                # startPoll(poll_codes[getRandomCode()], cols)
+                self.startPoll(poll_codes[0], cols)
 
             # Check to see if object has been populated with commands from user. If greater than one, send commands down pipeline.
             time.sleep(UPDATE_INTERVAL)
