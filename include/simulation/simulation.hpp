@@ -31,6 +31,7 @@ struct Simulation
     vector<tuple<float, float>> spawnPoints;
     VictoryStatus vstat;
     bool isRunning = true;
+    bool doit = true;
 
     explicit
 	Simulation(sf::Window& window)
@@ -190,17 +191,19 @@ struct Simulation
             }
 
             // For testing purposes.
-            // for (Colony& colony : colonies)
-            // {
-            //     if (colony.ants.size() > 135 && colony.ants_color == sf::Color::Red)
-            //     {
-            //         // vstat.winner = colony.getColorString();
-            //         // isRunning = false;
-            //         // break;
+            for (Colony& colony : colonies)
+            {
+                if (colony.ants.size() > 135 && colony.ants_color == sf::Color::Red && doit)
+                {
+                    // vstat.winner = colony.getColorString();
+                    // isRunning = false;
+                    // break;
 
-            //         c.server_Create_Poll("_rgbc");
-            //     }
-            // }
+                    cout << "doit" << endl;
+                    c.server_Create_Poll("_rgbc");
+                    doit = false;
+                }
+            }
 
 			// Search for fights
 			fight_system.checkForFights(colonies, world);

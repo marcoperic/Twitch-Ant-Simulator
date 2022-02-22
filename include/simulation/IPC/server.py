@@ -9,6 +9,13 @@ UPDATE_INTERVAL = 5 # How many seconds between command transmissions
 # spawn, feed, quick (speed), kill, more ants (lower food req for spawning)
 poll_codes = ['s', 'f', 'q', 'k', 'm']
 
+def get_key(val, colors):
+    for key, value in colors.items():
+         if val == value:
+             return str(key)
+ 
+    return "key doesn't exist"
+
 def encode(cmd_q):
     output = ""
     for i in cmd_q:
@@ -23,7 +30,9 @@ def getColonies(str, colors):
     colonies = []
     for c in str:
         if (c in colors.values()):
-            colonies.append({'title' : str(colors.index(c))})
+            colonies.append({'title' : '' + get_key(c, colors)})
+
+    return colonies
 
 def getRandomCode():
     random.randint(0, len(poll_codes) - 1) # might cause index problem
@@ -50,11 +59,12 @@ class Server:
         poll_data = {}
         type = code
         colonies = getColonies(cols, self.colors)
-    
+        print(colonies)
+        
         if (type == 's'):
             quantity = 250 # Spawn 250 ants
-            self.poll_info.append('spawn_' + quantity)
-            poll_data = {'title': 'Vote for a colony to spawn ' + quantity + ' ants!',
+            self.poll_info.append('spawn_' + str(quantity))
+            poll_data = {'title': 'Vote for a colony to spawn ' + str(quantity) + ' ants!',
                          'choices' : colonies}
 
         self.chatbot.create_poll(poll_data)
