@@ -14,7 +14,7 @@ def get_key(val, colors):
          if val == value:
              return str(key)
  
-    return "key doesn't exist"
+    return None
 
 def encode(cmd_q):
     output = ""
@@ -54,6 +54,7 @@ class Server:
     
     def startPoll(self, code, cols):
         if (len(self.poll_info) > 0): # We already have active poll data
+            print ('Poll currently active. Stopping.')
             return
 
         poll_data = {}

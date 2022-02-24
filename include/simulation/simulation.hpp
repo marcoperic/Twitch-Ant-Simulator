@@ -191,19 +191,27 @@ struct Simulation
             }
 
             // For testing purposes.
-            for (Colony& colony : colonies)
-            {
-                if (colony.ants.size() > 135 && colony.ants_color == sf::Color::Red && doit)
-                {
-                    // vstat.winner = colony.getColorString();
-                    // isRunning = false;
-                    // break;
+            // for (Colony& colony : colonies)
+            // {
+            //     if (colony.ants.size() > 135 && colony.ants_color == sf::Color::Red && doit)
+            //     {
+            //         // vstat.winner = colony.getColorString();
+            //         // isRunning = false;
+            //         // break;
 
-                    cout << "doit" << endl;
-                    c.server_Create_Poll("_rgbc");
-                    doit = false;
-                }
-            }
+            //         cout << "doit" << endl;
+            //         string cols = getCurrentColoniesStr();
+            //         if (cols.length() == 0)
+            //         {
+            //             break;
+            //         }
+            //         else
+            //         {
+            //             c.server_Create_Poll("_" + cols);
+            //         }
+            //         doit = false;
+            //     }
+            // }
 
 			// Search for fights
 			fight_system.checkForFights(colonies, world);
@@ -211,6 +219,33 @@ struct Simulation
 			renderer.updateColoniesStats(dt);
 		}
 	}
+
+    string getCurrentColoniesStr()
+    {
+        string ret = "";
+
+        for (Colony& c : colonies)
+        {
+            if (c.getColor() == sf::Color::Red)
+            {
+                ret += "r";
+            }
+            else if (c.getColor() == sf::Color::Blue)
+            {
+                ret += "b";
+            }
+            else if (c.getColor() == sf::Color::Green)
+            {
+                ret += "g";
+            }
+            else if (c.getColor() == sf::Color::Cyan)
+            {
+                ret += "c";
+            }
+        }
+
+        return ret;
+    }
     
     void removeDeadAnts()
     {

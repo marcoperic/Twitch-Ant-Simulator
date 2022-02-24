@@ -14,8 +14,10 @@ using namespace edtr;
 int main()
 {
     sf::Clock clock;
+    sf::Clock poll_clock;
 	sf::ContextSettings settings;
     sf::Font font;
+
     font.loadFromFile("res/font.ttf");
     TextControl tc(font);
 	settings.antialiasingLevel = 4;
@@ -34,7 +36,7 @@ int main()
         scene->resize();
         std::shared_ptr<TimeController> timer = scene->getByName<TimeController>("timer");
         clock.restart();
-
+        poll_clock.restart();
         // start simulation immediately after booting up.
         timer->current_state = TimeController::State::Play;
         timer->select(TimeController::State::Play);
@@ -52,10 +54,17 @@ int main()
                 window.draw(tc.getText(simulation.vstat, true));
             }
 
+            if (poll_clock.getElapsedTime().asSeconds() > 15)
+            {
+                simulation.c.server_Create_Poll("_ " + simulation.getCurrentColoniesStr());
+                poll_clock.restart();
+            }
+
             window.display();
         }
         
         clock.restart();
+
         while (clock.getElapsedTime().asMilliseconds() < 5000)
         {
             // Update
