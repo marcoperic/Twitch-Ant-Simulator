@@ -72,12 +72,25 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         r = requests.get(url=url, headers=headers).json()['data'][0]
         print(r)
 
-        # Do work here.
+        # Find which colony had most votes
+        winner = self.getPollWinner()
         # Use poll_codes to know what the poll was for. Send command to client. 
 
         self.cvar.poll_info.clear()
         return # Return silent terminates thread.
 
+    # def createCommand(self, type):
+
+    def getPollWinner(self, r):
+        options = r['choices']
+        winner = ""
+        max = -1
+        for c in options:
+            if (c['votes'] > max):
+                max = c['votes']
+                winner = c['title']
+
+        return c[0] # return the first character - all we care about
 
     def do_command(self, e, cmd, args):
         c = self.connection
