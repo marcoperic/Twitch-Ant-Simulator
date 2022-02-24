@@ -66,13 +66,14 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
 
     def handlePollResult(self):
         print('Poll handler opened.')
-        time.sleep(POLL_DURATION + 5) # Add 20 seconds to account for any API delays, etc...
+        time.sleep(POLL_DURATION + 5) # Add 5 seconds to account for any API delays, etc...
         url = 'https://api.twitch.tv/helix/polls?broadcaster_id=' + self.channel_id
         headers = {'Client-ID': self.client_id, 'Authorization': 'Bearer ' + self.token}
         r = requests.get(url=url, headers=headers).json()['data'][0]
         print(r)
 
-        # Do work here. 
+        # Do work here.
+        # Use poll_codes to know what the poll was for. Send command to client. 
 
         self.cvar.poll_info.clear()
         return # Return silent terminates thread.
@@ -138,7 +139,7 @@ def main():
     #refresh token 18yok3pd703svpr6xqule44kq4axh3g4z4clamjoyhw26zzhol
     username  = 'mperic_chatbot'
     client_id = 'gp762nuuoqcoxypju8c569th9wz7q5'
-    token     = 'eq7ozpx0kamhe6pwl6igeb5vo87u7c'
+    token     = '5bhttb8p6p1gojii2st9jdb423vmes'
     channel   = 'mperic'
 
     
