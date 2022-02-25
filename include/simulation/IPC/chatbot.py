@@ -7,7 +7,7 @@ import _thread
 
 from server import Server
 
-POLL_DURATION = 60
+POLL_DURATION = 20 # Temporary - default 60?
 
 class TwitchBot(irc.bot.SingleServerIRCBot):
     def __init__(self, username, client_id, token, channel):
@@ -116,6 +116,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             else:
                 if (args[1] in self.cvar.colors):
                     cmd += self.cvar.colors[args[1]]
+                    cmd += '1'
                     self.cvar.pushCmd(cmd)
                 else:
                     c.privmsg(self.channel, "Invalid color. Try another one, or check the colorblind panel below!")
@@ -128,6 +129,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
             else:
                 if (args[1] in self.cvar.colors):
                     cmd += self.cvar.colors[args[1]]
+                    cmd += '1'
                     self.cvar.pushCmd(cmd)
                 else:
                     c.privmsg(self.channel, "Too many arguments! Please try !feed color")

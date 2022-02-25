@@ -78,6 +78,15 @@ struct Colony
 		return ant;
 	}
 
+	void createNWorker(int n)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			createWorker();
+		}
+	}
+	
+
 	void specializeSoldier(Ant& ant)
 	{
 		--base.enemies_found_count;
@@ -224,5 +233,15 @@ struct Colony
 		float x = (v.x + r * cos(theta));
 		float y = (v.y + r * sin(theta));
 		return sf::Vector2f({x, y});
+	}
+
+	vector<sf::Vector2f> set_radialNoise(sf::Vector2f v, float radius, int n)
+	{
+		vector<sf::Vector2f> ret;
+
+		for (int i = 0; i < n; i++)
+			ret.push_back(radialNoise(v, radius));
+
+		return ret;
 	}
 };

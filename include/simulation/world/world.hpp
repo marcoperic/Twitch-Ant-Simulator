@@ -82,6 +82,12 @@ struct World
         addFoodAt(sf::Vector2i{to<int32_t>(x) / map.cell_size, to<int32_t>(y) / map.cell_size}, quantity);
 	}
 
+	void addNFoodAt(vector<Vector2f> v, uint32_t quantity, int n)
+	{
+		for (int i = 0; i < n; i++)
+        	addFoodAt(sf::Vector2i{to<int32_t>(v.get(i).x) / map.cell_size, to<int32_t>(v.get(i).y) / map.cell_size}, quantity);
+	}
+
     void addFoodAt(sf::Vector2i pos, uint32_t quantity)
     {
         if (map.checkCoords(pos)) {

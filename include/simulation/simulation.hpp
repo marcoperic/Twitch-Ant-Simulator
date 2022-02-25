@@ -71,27 +71,45 @@ struct Simulation
            if (cmd.at(0) == 'S') // spawn ant
            {
                char color = cmd.at(1);
+               int quantity = stoi(cmd.substr(2))
                bool found = true;
                Colony& c = findColonyByColor(color, &found);
 
                if (!found)
                 continue;
 
-               c.createWorker();
+               if (quantity == 1)
+               {
+                    c.createWorker();
+               }
+               else
+               {
+                   c.createNWorker(quantity);
+               }
+
                cout << "Spawned ant" << endl;
            }
            else if (cmd.at(0) == 'F') // spawn food
            {
                char color = cmd.at(1);
+               int quantity = stoi(cmd.substr(2))
                bool found = true;
                Colony& c = findColonyByColor(color, &found);
 
                if (!found)
                 continue;
 
-               sf::Vector2f coords = c.base.position;
-               sf::Vector2f new_coords = c.radialNoise(coords, 125); // 125px radius?
-               world.addFoodAt(new_coords.x, new_coords.y, 10); // spawn food at coords
+               if (quantity == 1)
+               {
+                    sf::Vector2f coords = c.base.position;
+                    sf::Vector2f new_coords = c.radialNoise(coords, 125); // 125px radius?
+                    world.addFoodAt(new_coords.x, new_coords.y, 10); // spawn food at coords
+               }
+               else
+               {
+                   vector<sf::Vector2f> pos = c.set_radialNoise(c.base.position, 125, quantity);
+                   world.addNFoodAt(pos, 10, quantity)
+               }
            }
            else if (cmd.at(0) == '@')
            {
