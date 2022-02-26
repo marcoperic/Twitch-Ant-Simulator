@@ -128,8 +128,8 @@ class Server:
             if (message[0] == '_'):
                 print('Attempting to start poll')
                 cols = message[1:]
-                self.startPoll(poll_codes[getRandomCode()], cols)
-                # self.startPoll(poll_codes[0], cols)
+                # self.startPoll(poll_codes[getRandomCode()], cols)
+                self.startPoll(poll_codes[0], cols)
 
             # Check to see if object has been populated with commands from user. If greater than one, send commands down pipeline.
             time.sleep(UPDATE_INTERVAL)

@@ -75,11 +75,20 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         # Find which colony had most votes
         winner = self.getPollWinner()
         # Use poll_codes to know what the poll was for. Send command to client. 
+        self.cvar.pushCmd(self.getCommandType(winner))
 
         self.cvar.poll_info.clear()
         return # Return silent terminates thread.
 
     # def createCommand(self, type):
+
+    def getCommandType(self, winner):
+        token = self.cvar.poll_info[0]
+        if (token[0] == 's'):
+            temp = token.split("_")
+            temp = int(temp[1]) # get the quantity
+            print('generating spawn command')
+            return 'S' + winner + str(temp)
 
     def getPollWinner(self, r):
         options = r['choices']
