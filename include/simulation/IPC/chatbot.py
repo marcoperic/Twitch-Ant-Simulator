@@ -73,7 +73,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         print(r)
 
         # Find which colony had most votes
-        winner = self.getPollWinner()
+        winner = self.getPollWinner(r)
         # Use poll_codes to know what the poll was for. Send command to client. 
         self.cvar.pushCmd(self.getCommandType(winner))
 
@@ -99,7 +99,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
                 max = c['votes']
                 winner = c['title']
 
-        return c[0] # return the first character - all we care about
+        return winner[0] # return the first character - all we care about
 
     def do_command(self, e, cmd, args):
         c = self.connection

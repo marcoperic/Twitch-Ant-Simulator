@@ -8,6 +8,7 @@
 #include "simulation/ant/ant_mode.hpp"
 #include "render/world_renderer.hpp"
 
+using namespace std;
 
 struct World
 {
@@ -82,10 +83,10 @@ struct World
         addFoodAt(sf::Vector2i{to<int32_t>(x) / map.cell_size, to<int32_t>(y) / map.cell_size}, quantity);
 	}
 
-	void addNFoodAt(vector<Vector2f> v, uint32_t quantity, int n)
+	void addNFoodAt(vector<sf::Vector2f> v, uint32_t quantity, int n)
 	{
 		for (int i = 0; i < n; i++)
-        	addFoodAt(sf::Vector2i{to<int32_t>(v.get(i).x) / map.cell_size, to<int32_t>(v.get(i).y) / map.cell_size}, quantity);
+        	addFoodAt(sf::Vector2i{to<int32_t>(v.at(i).x) / map.cell_size, to<int32_t>(v.at(i).y) / map.cell_size}, quantity);
 	}
 
     void addFoodAt(sf::Vector2i pos, uint32_t quantity)

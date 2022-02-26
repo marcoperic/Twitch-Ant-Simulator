@@ -84,6 +84,8 @@ struct Colony
 		{
 			createWorker();
 		}
+
+		cout << "creating " + to_string(n) + " workers" << endl;
 	}
 	
 

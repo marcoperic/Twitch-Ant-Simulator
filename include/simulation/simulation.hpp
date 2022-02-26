@@ -71,7 +71,7 @@ struct Simulation
            if (cmd.at(0) == 'S') // spawn ant
            {
                char color = cmd.at(1);
-               int quantity = stoi(cmd.substr(2))
+               int quantity = stoi(cmd.substr(2));
                bool found = true;
                Colony& c = findColonyByColor(color, &found);
 
@@ -92,7 +92,7 @@ struct Simulation
            else if (cmd.at(0) == 'F') // spawn food
            {
                char color = cmd.at(1);
-               int quantity = stoi(cmd.substr(2))
+               int quantity = stoi(cmd.substr(2));
                bool found = true;
                Colony& c = findColonyByColor(color, &found);
 
@@ -108,7 +108,7 @@ struct Simulation
                else
                {
                    vector<sf::Vector2f> pos = c.set_radialNoise(c.base.position, 125, quantity);
-                   world.addNFoodAt(pos, 10, quantity)
+                   world.addNFoodAt(pos, 10, quantity);
                }
            }
            else if (cmd.at(0) == '@')
