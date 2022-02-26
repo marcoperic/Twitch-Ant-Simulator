@@ -84,11 +84,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
 
     def getCommandType(self, winner):
         token = self.cvar.poll_info[0]
-        if (token[0] == 's'):
-            temp = token.split("_")
-            temp = int(temp[1]) # get the quantity
-            print('generating spawn command')
-            return 'S' + winner + str(temp)
+        return token.upper() + winner + str(token.split("_")[1])
 
     def getPollWinner(self, r):
         options = r['choices']
