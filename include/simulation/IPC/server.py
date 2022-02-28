@@ -64,31 +64,31 @@ class Server:
         
         if (type == 's'):
             quantity = 250 # Spawn 250 ants
-            self.poll_info.append('spawn_' + str(quantity))
+            self.poll_info.append('S_' + str(quantity))
             poll_data = {'title': 'Vote for a colony to spawn ' + str(quantity) + ' ants!',
                          'choices' : colonies}
 
         elif (type == 'f'):
             quantity = 250
-            self.poll_info.append('feed_' + str(quantity))
+            self.poll_info.append('F_' + str(quantity))
             poll_data = {'title': 'Vote for a colony to spawn ' + str(quantity) + ' units of food!',
                          'choices' : colonies}
 
         elif (type == 'q'):
             modifier = 0.1
-            self.poll_info.append('quic_' + str(modifier))
+            self.poll_info.append('Q_' + str(modifier))
             poll_data = {'title': 'Vote for a colony to increase ALL ant speed by ' + str(modifier * 100) + '%!',
                          'choices' : colonies}
 
         elif (type == 'k'):
             quantity = 250
-            self.poll_info.append('kill_' + str(quantity))
+            self.poll_info.append('K_' + str(quantity))
             poll_data = {'title': 'Vote for a colony to kill ' + str(quantity) + ' ants!',
                          'choices' : colonies}
 
         elif (type == 'm'):
             modifier = 0.1
-            self.poll_info.append('more_' + str(modifier))
+            self.poll_info.append('M_' + str(modifier))
             poll_data = {'title': 'Vote for a colony to increase spawn rate by ' + str(modifier * 100) + '%!',
                          'choices' : colonies}
 

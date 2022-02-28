@@ -83,8 +83,8 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
     # def createCommand(self, type):
 
     def getCommandType(self, winner):
-        token = self.cvar.poll_info[0]
-        return token.upper() + winner + str(token.split("_")[1])
+        token = self.cvar.poll_info[0].split("_")
+        return token[0] + winner + str(token[1])
 
     def getPollWinner(self, r):
         options = r['choices']
