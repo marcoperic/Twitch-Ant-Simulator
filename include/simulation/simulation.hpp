@@ -31,7 +31,7 @@ struct Simulation
     vector<tuple<float, float>> spawnPoints;
     VictoryStatus vstat;
     bool isRunning = true;
-    bool doit = true;
+    // bool doit = true;
 
     explicit
 	Simulation(sf::Window& window)
@@ -102,14 +102,26 @@ struct Simulation
                if (quantity == 1)
                {
                     sf::Vector2f coords = c.base.position;
-                    sf::Vector2f new_coords = c.radialNoise(coords, 125); // 125px radius?
+                    sf::Vector2f new_coords = c.radialNoise(coords, 75); // 125px radius?
                     world.addFoodAt(new_coords.x, new_coords.y, 10); // spawn food at coords
                }
                else
                {
-                   vector<sf::Vector2f> pos = c.set_radialNoise(c.base.position, 125, quantity);
+                   vector<sf::Vector2f> pos = c.set_radialNoise(c.base.position, 75, quantity);
                    world.addNFoodAt(pos, 10, quantity);
                }
+           }
+           else if (cmd.at(0) == 'K') // No quantity check necessary as these will only be sent by server.
+           {
+               char color = cmd.at(1);
+               int quantity = stoi(cmd.substr(2));
+               bool found = true;
+               Colony& c = findColonyByColor(color, &found);
+
+               if (!found)
+                continue;
+
+               c.killNAnts(world, quantity);
            }
            else if (cmd.at(0) == '@')
            {
@@ -209,27 +221,13 @@ struct Simulation
             }
 
             // For testing purposes.
-            // for (Colony& colony : colonies)
-            // {
-            //     if (colony.ants.size() > 135 && colony.ants_color == sf::Color::Red && doit)
-            //     {
-            //         // vstat.winner = colony.getColorString();
-            //         // isRunning = false;
-            //         // break;
-
-            //         cout << "doit" << endl;
-            //         string cols = getCurrentColoniesStr();
-            //         if (cols.length() == 0)
-            //         {
-            //             break;
-            //         }
-            //         else
-            //         {
-            //             c.server_Create_Poll("_" + cols);
-            //         }
-            //         doit = false;
-            //     }
-            // }
+            //for (Colony& colony : colonies)
+            //{
+            //    if (colony.ants.size() > 505 && colony.ants_color == sf::Color::Red)
+            //    {
+            //        colony.testKill(world);
+            //    }
+            //}
 
 			// Search for fights
 			fight_system.checkForFights(colonies, world);

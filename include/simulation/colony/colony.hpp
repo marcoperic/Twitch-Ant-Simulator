@@ -18,6 +18,7 @@ using namespace std;
 
 struct Colony
 {
+
 	ColonyBase       base;
 	uint32_t         max_ants_count;
 	civ::Vector<Ant> ants;
@@ -48,7 +49,7 @@ struct Colony
     {
         id = colony_id;
         base.food = 0.0f;
-        uint32_t ants_count = 128;
+        uint32_t ants_count = 500;
         for (uint32_t i(ants_count); i--;) {
             createWorker();
         }
@@ -160,6 +161,33 @@ struct Colony
 		}
 		for (uint64_t ant_id : to_remove) {
 			ants.erase(ant_id);
+		}
+	}
+
+	void testKill(World& w)
+	{
+		int ct = 0;
+
+			for (Ant& current : ants)
+			{
+				if (ct++ > 100)
+					break;
+
+				current.kill(w);
+				ants.erase(current.id);
+			}
+	}
+
+	void killNAnts(World& w, int quantity)
+	{
+		int ct = 0;
+		for (Ant& current: ants)
+		{
+			if (ct++ > quantity)
+				break;
+			
+			current.kill(w);
+			ants.erase(current.id);
 		}
 	}
     
