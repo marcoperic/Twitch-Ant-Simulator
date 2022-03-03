@@ -7,8 +7,8 @@
 #include "simulation/simulation.hpp"
 #include "editor/editor_scene.hpp"
 #include "editor/center-text-control.hpp"
-
-#define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
+#include <time.h>
+#include <stdlib.h>
 using namespace edtr;
 
 int main()
@@ -17,7 +17,7 @@ int main()
     sf::Clock poll_clock;
 	sf::ContextSettings settings;
     sf::Font font;
-
+    Conf::loadUserConf();
     font.loadFromFile("res/font.ttf");
     TextControl tc(font);
 	settings.antialiasingLevel = 4;
@@ -28,9 +28,11 @@ int main()
     
     while (window.isOpen())
     {
+        srand(time(NULL));
         // Initialize simulation
         Simulation simulation(window);
-        simulation.loadMap(MAP_NAME);
+        // simulation.loadMap(MAP_NAME);
+        simulation.loadMap(Conf::chooseMap());
         // Create editor scene around it
         GUI::Scene::Ptr scene = create<edtr::EditorScene>(window, simulation);
         scene->resize();
@@ -54,7 +56,7 @@ int main()
                 window.draw(tc.getText(simulation.vstat, true));
             }
 
-            if (poll_clock.getElapsedTime().asSeconds() > 10) // every three minutes start the poll
+            if (poll_clock.getElapsedTime().asSeconds() > 180) // every three minutes start the poll
             {
                 simulation.c.server_Create_Poll("_ " + simulation.getCurrentColoniesStr());
                 poll_clock.restart();

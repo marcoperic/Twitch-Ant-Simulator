@@ -1,7 +1,12 @@
 #pragma once
 
 #include <memory>
+#include <filesystem>
+#include <string>
+#include <vector>
 #include <SFML/Graphics.hpp>
+#include <stdlib.h>
+namespace fs = std::filesystem;
 
 
 template<typename T>
@@ -43,11 +48,28 @@ struct DefaultConf
 		DefaultConf::ANT_TEXTURE = nullptr;
 		DefaultConf::MARKER_TEXTURE = nullptr;
 	}
+
+    static const std::string chooseMap()
+    {
+        vector<std::string> maps;
+        std::string path = "res\\";
+        for (const auto & entry : fs::directory_iterator(path))
+        {
+            if (entry.path().u8string().find("map") != string::npos)
+            {
+                maps.push_back(entry.path().u8string());
+            }
+        }
+
+        const std::string test = maps.at(rand() % maps.size());
+        return test;
+    }
     
     static bool loadUserConf()
     {
         std::ifstream conf_file("conf.txt");
         if (conf_file) {
+            cout << "Found configuration file." << endl;
             std::string line;
             uint32_t line_count = 0;
             while (std::getline(conf_file, line)) {

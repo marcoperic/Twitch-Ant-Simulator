@@ -50,7 +50,7 @@ struct Colony
     {
         id = colony_id;
         base.food = 0.0f;
-        uint32_t ants_count = 500;
+        uint32_t ants_count = 100;
         for (uint32_t i(ants_count); i--;) {
             createWorker();
         }
@@ -271,9 +271,9 @@ struct Colony
 
 	sf::Vector2f radialNoise(sf::Vector2f v, float radius)
 	{
-		float rand = RNGf::getRange(0.0f, 1.0f);
-		float r = radius * sqrt(rand);
-		float theta = rand * 2 * PI;
+		float rannum = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+		float r = radius * sqrt(rannum);
+		float theta = rannum * 2 * PI;
 		float x = (v.x + r * cos(theta));
 		float y = (v.y + r * sin(theta));
 		return sf::Vector2f({x, y});
