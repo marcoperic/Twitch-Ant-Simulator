@@ -30,6 +30,7 @@ struct Colony
 	uint64_t         ant_creation_id  = 0;
     bool             color_changed    = false;
     bool             position_changed = false;
+	float 			 ant_cost = 4.0f;
 
 
     Colony() = default;
@@ -123,7 +124,7 @@ struct Colony
 
 	void createNewAnts(float dt)
 	{
-		const float ant_cost = 4.0f;
+		// const float ant_cost = 4.0f;
 		if (ants_creation_cooldown.updateAutoReset(dt) && isNotFull()) {
 			if (mustCreateSoldier()) {
 				if (base.useFood(3.0f * ant_cost)) {
@@ -161,6 +162,19 @@ struct Colony
 		}
 		for (uint64_t ant_id : to_remove) {
 			ants.erase(ant_id);
+		}
+	}
+
+	void increaseSpawnRate(float modifier)
+	{
+		ant_cost -= modifier;
+	}
+
+	void increaseAntSpeed(float modifier)
+	{
+		for (Ant& current : ants)
+		{
+			current.move_speed += modifier;
 		}
 	}
 

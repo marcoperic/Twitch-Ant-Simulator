@@ -75,9 +75,9 @@ class Server:
                          'choices' : colonies}
 
         elif (type == 'q'):
-            modifier = 0.1
+            modifier = 5 # Added to base speed of 40.0f
             self.poll_info.append('Q_' + str(modifier))
-            poll_data = {'title': 'Vote for a colony to increase ALL ant speed by ' + str(modifier * 100) + '%!',
+            poll_data = {'title': 'Vote for a colony to increase ant speed !',
                          'choices' : colonies}
 
         elif (type == 'k'):
@@ -87,9 +87,9 @@ class Server:
                          'choices' : colonies}
 
         elif (type == 'm'):
-            modifier = 0.1
+            modifier = 39 # Divided by 10.0
             self.poll_info.append('M_' + str(modifier))
-            poll_data = {'title': 'Vote for a colony to increase spawn rate by ' + str(modifier * 100) + '%!',
+            poll_data = {'title': 'Vote for a colony to increase spawn rate!',
                          'choices' : colonies}
 
         self.chatbot.create_poll(poll_data)
@@ -128,8 +128,8 @@ class Server:
             if (message[0] == '_'):
                 print('Attempting to start poll')
                 cols = message[1:]
-                # self.startPoll(poll_codes[getRandomCode()], cols)
-                self.startPoll(poll_codes[3], cols)
+                self.startPoll(poll_codes[getRandomCode()], cols)
+                # self.startPoll(poll_codes[4], cols)
 
             # Check to see if object has been populated with commands from user. If greater than one, send commands down pipeline.
             time.sleep(UPDATE_INTERVAL)

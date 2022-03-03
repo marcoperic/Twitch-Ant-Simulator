@@ -123,6 +123,30 @@ struct Simulation
 
                c.killNAnts(world, quantity);
            }
+           else if (cmd.at(0) == 'Q')
+           {
+               char color = cmd.at(1);
+               int quantity = stoi(cmd.substr(2));
+               bool found = true;
+               Colony& c = findColonyByColor(color, &found);
+
+               if (!found)
+                continue;
+
+               c.increaseAntSpeed(quantity / 1.0);  
+           }
+           else if (cmd.at(0) == 'M')
+           {
+               char color = cmd.at(1);
+               int quantity = stoi(cmd.substr(2));
+               bool found = true;
+               Colony& c = findColonyByColor(color, &found);
+
+               if (!found)
+                continue;
+
+               c.increaseSpawnRate(quantity / 10.0);
+           }
            else if (cmd.at(0) == '@')
            {
                string command = cmd.substr(1);

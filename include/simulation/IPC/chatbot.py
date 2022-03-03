@@ -4,6 +4,7 @@ import requests
 import threading
 import time
 import _thread
+import random
 
 from server import Server
 
@@ -87,7 +88,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         return token[0] + winner + str(token[1])
 
     def getPollWinner(self, r):
-        options = r['choices']
+        options = random.shuffle(r['choices']) # Shuffle so that red isn't chosen by default when tied.
         winner = ""
         max = -1
         for c in options:
@@ -138,17 +139,6 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
                     self.cvar.pushCmd(cmd)
                 else:
                     c.privmsg(self.channel, "Too many arguments! Please try !feed color")
-                    
-
-        elif cmd == "event":
-            # Cause good or bad event near colony.
-            cmd = "E"
-
-            if (len(args) > 2):
-                c.privmsg(self.channel, "Too many arguments! Please try !event eventname")
-            else:
-                if (args[1] in self.cvar.events):
-                    print()
 
 def main():
     if len(sys.argv) == 5:
