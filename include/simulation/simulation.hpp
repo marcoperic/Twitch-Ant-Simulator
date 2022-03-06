@@ -231,9 +231,11 @@ struct Simulation
 
             for (Colony& colony: colonies)
             {
-                if (colony.ants.size() == 0)
+                if (colony.ants.size() < 1)
                 {
-                    removeColony(colony.id);
+                    cout << unsigned(colony.id) << endl;
+                     removeColony(colony.id);
+                    // removeColony_death(colony.id);
                 }
             }
 
@@ -324,12 +326,20 @@ struct Simulation
 		renderer.render(world, target);
 	}
 
+    void removeColony_death(uint8_t colony_id)
+    {
+        colonies.erase(colony_id);
+        renderer.colonies.erase(colony_id);
+        world.renderer.colonies_color.erase(colony_id);
+        world.clearMarkers(colony_id);
+    }
+
     void removeColony(uint8_t colony_id)
     {
-
         for (Colony& c : colonies) {
-            c.stopFightsWith(colony_id);
+           c.stopFightsWith(colony_id);
         }
+
         colonies.erase(colony_id);
         renderer.colonies.erase(colony_id);
         world.renderer.colonies_color.erase(colony_id);

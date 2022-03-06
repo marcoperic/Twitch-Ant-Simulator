@@ -23,7 +23,7 @@ int main()
 	settings.antialiasingLevel = 4;
     int32_t window_style = Conf::USE_FULLSCREEN ? sf::Style::Fullscreen : sf::Style::Default;
 	sf::RenderWindow window(sf::VideoMode(Conf::WIN_WIDTH, Conf::WIN_HEIGHT), "AntSim", window_style, settings);
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(240);
 
     
     while (window.isOpen())

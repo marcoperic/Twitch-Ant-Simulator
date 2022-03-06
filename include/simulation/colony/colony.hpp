@@ -50,7 +50,7 @@ struct Colony
     {
         id = colony_id;
         base.food = 0.0f;
-        uint32_t ants_count = 100;
+        uint32_t ants_count = 150;
         for (uint32_t i(ants_count); i--;) {
             createWorker();
         }
@@ -259,14 +259,14 @@ struct Colony
 
     void stopFightsWith(uint8_t colony_id)
     {
-        for (Ant& a : ants) {
-            if (a.target) {
-                a.fight_mode = FightMode::NoFight;
-                if (a.target->col_id == colony_id) {
-                    a.target = {};
-                }
-            }
-        }
+		for (Ant& a : ants) {
+			if (a.target) {
+				a.fight_mode = FightMode::NoFight;
+				if (a.target->col_id == colony_id) {
+					a.target = {};
+				}
+			}
+		}
     }
 
 	sf::Vector2f radialNoise(sf::Vector2f v, float radius)
