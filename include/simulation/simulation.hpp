@@ -338,6 +338,8 @@ struct Simulation
             c.stopFightsWith(colony_id);
         }
 
+        num_cols--;
+        extinct_colonies.push_back(colony_id);
         colonies.erase(colony_id);
         //rescaleIDs(colony_id);
         renderer.colonies.erase(colony_id);
