@@ -58,7 +58,7 @@ int main()
 
             if (poll_clock.getElapsedTime().asSeconds() > 180) // every three minutes start the poll
             {
-                simulation.c.server_Create_Poll("_ " + simulation.getCurrentColoniesStr());
+                simulation.cl_cont.server_Create_Poll("_ " + simulation.getCurrentColoniesStr());
                 poll_clock.restart();
             }
 

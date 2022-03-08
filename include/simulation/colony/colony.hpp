@@ -259,11 +259,14 @@ struct Colony
 
     void stopFightsWith(uint8_t colony_id)
     {
-		for (Ant& a : ants) {
-			if (a.target) {
-				a.fight_mode = FightMode::NoFight;
-				if (a.target->col_id == colony_id) {
-					a.target = {};
+		if (ants.size() > 0)
+		{
+			for (Ant& a : ants) {
+				if (a.target) {
+					a.fight_mode = FightMode::NoFight;
+					if (a.target->col_id == colony_id) {
+						a.target = {};
+					}
 				}
 			}
 		}

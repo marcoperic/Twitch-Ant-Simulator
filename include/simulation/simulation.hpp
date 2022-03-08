@@ -21,17 +21,18 @@
 struct Simulation
 {
 	civ::Vector<Colony> colonies;
+    vector<uint8_t> extinct_colonies;
 	World world;
 	Renderer renderer;
 	EventSate ev_state;
 	FightSystem fight_system;
 	sf::Clock clock;
     AsyncDistanceFieldBuilder distance_field_builder;
-    client_controller c;
+    client_controller cl_cont;
     vector<tuple<float, float>> spawnPoints;
     VictoryStatus vstat;
     bool isRunning = true;
-    // bool doit = true;
+    int num_cols = 4;
 
     explicit
 	Simulation(sf::Window& window)
@@ -196,9 +197,9 @@ struct Simulation
             removeDeadAnts();
 
             // Get incoming data from queue structure to perform operations based on chat interaction
-            if (c.isReady())
+            if (cl_cont.isReady())
             {
-                vector<string> temp = c.fetch();
+                vector<string> temp = cl_cont.fetch();
                 processCommands(temp, dt);
                 temp.clear();
             }
@@ -206,6 +207,18 @@ struct Simulation
             {
                 vector<string> temp = {};
                 processCommands(temp, dt);
+            }
+
+            for (Colony& colony : colonies)
+            {
+                if (colony.ants.size() == 0 && !isExtinct(colony.id))
+                {
+                    extinct_colonies.push_back(colony.id);
+                    colony.setColor(sf::Color::Black);
+                    world.addFoodAt(colony.base.position.x, colony.base.position.y, colony.base.food);
+                    colony.base.food = 0;
+                    num_cols--;
+                }
             }
 
 			// Update world cells (markers, density, walls)
@@ -229,31 +242,12 @@ struct Simulation
 				colony.update(dt, world);
 			}
 
-            for (Colony& colony: colonies)
-            {
-                if (colony.ants.size() < 1)
-                {
-                    cout << unsigned(colony.id) << endl;
-                     removeColony(colony.id);
-                    // removeColony_death(colony.id);
-                }
-            }
-
-            if (colonies.size() == 1)
+            if (num_cols == 1)
             {
                 // Only one colony left? End simulation.
                 //vstat.winner = colonies.get(0).getColorString();
                 isRunning = false;
             }
-
-            // For testing purposes.
-            //for (Colony& colony : colonies)
-            //{
-            //    if (colony.ants.size() > 505 && colony.ants_color == sf::Color::Red)
-            //    {
-            //        colony.testKill(world);
-            //    }
-            //}
 
 			// Search for fights
 			fight_system.checkForFights(colonies, world);
@@ -337,12 +331,27 @@ struct Simulation
     void removeColony(uint8_t colony_id)
     {
         for (Colony& c : colonies) {
-           c.stopFightsWith(colony_id);
+            if (c.id == colony_id)
+                continue;
+
+            cout << c.getColorString() << " stopping fights with " << unsigned(colony_id) << endl;
+            c.stopFightsWith(colony_id);
         }
 
         colonies.erase(colony_id);
+        //rescaleIDs(colony_id);
         renderer.colonies.erase(colony_id);
         world.renderer.colonies_color.erase(colony_id);
         world.clearMarkers(colony_id);
+    }
+
+    bool isExtinct(uint8_t colony_id)
+    {
+        if (std::find(extinct_colonies.begin(), extinct_colonies.end(), colony_id) != extinct_colonies.end()) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 };
