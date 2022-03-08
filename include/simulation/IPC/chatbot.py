@@ -88,7 +88,7 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         return token[0] + winner + str(token[1])
 
     def getPollWinner(self, r):
-        options = random.shuffle(r['choices']) # Shuffle so that red isn't chosen by default when tied.
+        options = r['choices'] # Shuffle so that red isn't chosen by default when tied.
         winner = ""
         max = -1
         for c in options:

@@ -214,7 +214,7 @@ struct Simulation
                 if (colony.ants.size() == 0 && !isExtinct(colony.id))
                 {
                     extinct_colonies.push_back(colony.id);
-                    colony.setColor(sf::Color::Black);
+                    colony.setColor(sf::Color(0,0,0,0));
                     world.addFoodAt(colony.base.position.x, colony.base.position.y, colony.base.food);
                     colony.base.food = 0;
                     num_cols--;
