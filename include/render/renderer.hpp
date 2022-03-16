@@ -40,7 +40,7 @@ struct Renderer
 		const sf::RenderStates& rs = vp_handler.getRenderState();
 		// Draw background;
 		sf::RectangleShape ground(sf::Vector2f(world.size.x, world.size.y));
-		ground.setFillColor(sf::Color::Black);
+		ground.setFillColor(sf::Color(10, 10, 10));
 		target.draw(ground, rs);
 		// Draw world
 		world.render(target, rs);
