@@ -72,4 +72,16 @@ struct TextControl
         return text;
     }
 
+    sf::Text getTimeText(std::string time)
+    {
+        sf::Text text(time, myFont, 50);
+        sf::FloatRect textRect = text.getLocalBounds();
+        text.setOrigin(textRect.left + textRect.width / 2.0f,
+            textRect.top + textRect.height / 2.0f);
+        text.setPosition(sf::Vector2f(Conf::WIN_WIDTH / 2.0f, 20));
+        text.setColor(sf::Color::Red);
+
+        return text;
+    }
+
 };

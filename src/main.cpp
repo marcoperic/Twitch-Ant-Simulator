@@ -7,6 +7,7 @@
 #include "simulation/simulation.hpp"
 #include "editor/editor_scene.hpp"
 #include "editor/center-text-control.hpp"
+#include "common/time_render.hpp"
 #include <time.h>
 #include <stdlib.h>
 using namespace edtr;
@@ -23,9 +24,8 @@ int main()
 	settings.antialiasingLevel = 4;
     int32_t window_style = Conf::USE_FULLSCREEN ? sf::Style::Fullscreen : sf::Style::Default;
 	sf::RenderWindow window(sf::VideoMode(Conf::WIN_WIDTH, Conf::WIN_HEIGHT), "AntSim", window_style, settings);
-	window.setFramerateLimit(240);
+	window.setFramerateLimit(60);
 
-    
     while (window.isOpen())
     {
         srand(time(NULL));
@@ -62,6 +62,8 @@ int main()
                 poll_clock.restart();
             }
 
+            // Draw timer
+            window.draw(tc.getTimeText(TimeRender::HumanReadableTime(clock.getElapsedTime().asMilliseconds())));
             window.display();
         }
         
