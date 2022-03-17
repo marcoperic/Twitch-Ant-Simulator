@@ -81,15 +81,14 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
         self.cvar.poll_info.clear()
         return # Return silent terminates thread.
 
-    # def createCommand(self, type):
-
     def getCommandType(self, winner):
         token = self.cvar.poll_info[0].split("_")
         return token[0] + winner + str(token[1])
 
     def getPollWinner(self, r):
         options = r['choices'] # Shuffle so that red isn't chosen by default when tied.
-        winner = ""
+        random.shuffle(options)
+        winner = options[0]
         max = -1
         for c in options:
             if (c['votes'] > max):

@@ -46,8 +46,6 @@ class Server:
         self.chatbot = chatbot
         self.command_queue = []
         self.poll_info = []
-        # self.command_queue.append('test1')
-        # self.command_queue.append('test2')
 
     def pushCmd(self, cmd):
         self.command_queue.append(cmd)
@@ -75,7 +73,7 @@ class Server:
                          'choices' : colonies}
 
         elif (type == 'q'):
-            modifier = 5 # Added to base speed of 40.0f
+            modifier = 8 # Added to base speed of 40.0f
             self.poll_info.append('Q_' + str(modifier))
             poll_data = {'title': 'Vote for a colony to increase ant speed !',
                          'choices' : colonies}
@@ -87,7 +85,7 @@ class Server:
                          'choices' : colonies}
 
         elif (type == 'm'):
-            modifier = 39 # Divided by 10.0
+            modifier = 1 # Divided by 10.0
             self.poll_info.append('M_' + str(modifier))
             poll_data = {'title': 'Vote for a colony to increase spawn rate!',
                          'choices' : colonies}

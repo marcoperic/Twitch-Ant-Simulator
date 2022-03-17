@@ -56,7 +56,7 @@ int main()
                 window.draw(tc.getText(simulation.vstat, true));
             }
 
-            if (poll_clock.getElapsedTime().asSeconds() > 60) // every one minute start the poll
+            if (poll_clock.getElapsedTime().asSeconds() > 120) // every two minutes start the poll
             {
                 simulation.cl_cont.server_Create_Poll("_ " + simulation.getCurrentColoniesStr());
                 poll_clock.restart();

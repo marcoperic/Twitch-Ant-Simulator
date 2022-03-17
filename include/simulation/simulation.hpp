@@ -246,6 +246,14 @@ struct Simulation
             {
                 // Only one colony left? End simulation.
                 //vstat.winner = colonies.get(0).getColorString();
+                for (Colony& colony : colonies)
+                {
+                    if (!isExtinct(colony.id))
+                    {
+                        vstat.winner = colony.getColorString();
+                        break;
+                    }
+                }
                 isRunning = false;
             }
 
