@@ -98,8 +98,8 @@ struct ColonyRenderer
 
     explicit
 	ColonyRenderer(civ::Ref<Colony> colony)
-		: ants_va(sf::Quads, 4 * Conf::ANTS_COUNT)
-		, ants_food_va(sf::Quads, 4 * Conf::ANTS_COUNT)
+		: ants_va(sf::Quads, 8 * Conf::ANTS_COUNT)
+		, ants_food_va(sf::Quads, 8 * Conf::ANTS_COUNT) // vector out of bounds because of limited amount of space? increased from 4 to 8.
 		, colony_ref(colony)
 	{
 		font.loadFromFile("res/font.ttf");
