@@ -90,5 +90,7 @@ void getCommands(const char* str)
     string temp(str);
     vector<string> tokens = split(temp, ";");
     commands = tokens;
-    commands.pop_back(); // erase the last element
+
+    if (commands.size() != 0)
+        commands.pop_back(); // erase the last element
 }
