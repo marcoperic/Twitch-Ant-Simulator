@@ -15,6 +15,7 @@ void debug();
 // Extern C 
 void relay(const char* str)
 {
+    cout << "Relay: " << str << endl;
     getCommands(str);
 }
 // Extern C
@@ -89,8 +90,12 @@ void getCommands(const char* str)
 {
     string temp(str);
     vector<string> tokens = split(temp, ";");
+
+    if (tokens.size() == 0) // If we have no commands.
+        return;
+    
     commands = tokens;
 
-    if (commands.size() != 0)
-        commands.pop_back(); // erase the last element
+    // if (commands.size() > 0)
+    //     commands.pop_back(); // erase the last element
 }
