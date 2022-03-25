@@ -22,7 +22,14 @@ struct TextLabel : public Item
         , alignment(Alignment::Center)
     {
         padding = 1.0f;
-        font.loadFromFile("res/font.ttf");
+        if (!font.loadFromFile("res/font.ttf"))
+		{
+			int i = 0;
+            while(!font.loadFromFile("res/font.ttf") && ++i < 10)
+            {
+                std::cout << "font.ttf failed to load... Trying again. (" << i << ")" << endl;
+            }
+		}
         text.setFont(font);
         text.setCharacterSize(char_size);
         setColor({100, 100, 100});

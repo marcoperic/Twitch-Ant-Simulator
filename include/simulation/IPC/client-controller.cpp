@@ -95,7 +95,7 @@ void getCommands(const char* str)
         return;
     
     commands = tokens;
-
+    
     // if (commands.size() > 0)
     //     commands.pop_back(); // erase the last element
 }

@@ -36,10 +36,29 @@ struct DefaultConf
 	static void loadTextures()
 	{
 		DefaultConf::ANT_TEXTURE = std::make_shared<sf::Texture>();
-		DefaultConf::ANT_TEXTURE->loadFromFile("res/ant.png");
+
+        if (!DefaultConf::ANT_TEXTURE->loadFromFile("res/ant.png"))
+        {
+            int i = 0;
+            while(!DefaultConf::ANT_TEXTURE->loadFromFile("res/ant.png") && ++i < 10)
+            {
+                std::cout << "ant.png failed to load... Trying again. (" << i << ")" << endl;
+            }
+        }
+
+		
+        if (!DefaultConf::MARKER_TEXTURE->loadFromFile("res/marker.png"))
+        {
+            int i = 0;
+            while(!DefaultConf::MARKER_TEXTURE->loadFromFile("res/marker.png") && ++i < 10)
+            {
+                std::cout << "marker.png failed to load... Trying again. (" << i << ")" << endl;
+            }
+        }
+
+		// DefaultConf::ANT_TEXTURE->loadFromFile("res/ant.png");
 		DefaultConf::ANT_TEXTURE->setSmooth(true);
 		DefaultConf::MARKER_TEXTURE = std::make_shared<sf::Texture>();
-		DefaultConf::MARKER_TEXTURE->loadFromFile("res/marker.png");
 		DefaultConf::MARKER_TEXTURE->setSmooth(true);
 	}
 
