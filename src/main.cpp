@@ -19,15 +19,7 @@ int main()
 	sf::ContextSettings settings;
     sf::Font font;
     Conf::loadUserConf();
-
-    if (!font.loadFromFile("res/font.ttf"))
-    {
-        int i = 0;
-        while(!font.loadFromFile("res/font.ttf") && ++i < 10)
-        {
-            std::cout << "font.ttf failed to load... Trying again. (" << i << ")" << endl;
-        }
-    }
+    font.loadFromFile("res/font.ttf");
     
     TextControl tc(font);
 	settings.antialiasingLevel = 4;

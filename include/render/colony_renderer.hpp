@@ -26,15 +26,7 @@ struct PopulationChart
 		: population(800, sf::Vector2f(800.0f, 100.0f), sf::Vector2f())
 		, population_update(3.0f)
 	{
-		if (!font.loadFromFile("res/font.ttf"))
-		{
-			int i = 0;
-            while(!font.loadFromFile("res/font.ttf") && ++i < 10)
-            {
-                std::cout << "font.ttf failed to load... Trying again. (" << i << ")" << endl;
-            }
-		}
-		
+		font.loadFromFile("res/font.ttf");
 		text.setFont(font);
 	}
 
@@ -110,15 +102,7 @@ struct ColonyRenderer
 		, ants_food_va(sf::Quads, 8 * Conf::ANTS_COUNT) // vector out of bounds because of limited amount of space? increased from 4 to 8.
 		, colony_ref(colony)
 	{
-		if (!font.loadFromFile("res/font.ttf"))
-		{
-			int i = 0;
-            while(!font.loadFromFile("res/font.ttf") && ++i < 10)
-            {
-                std::cout << "font.ttf failed to load... Trying again. (" << i << ")" << endl;
-            }
-		}
-
+		font.loadFromFile("res/font.ttf");
 		text.setFont(font);
 
         initializeAntsVA();
