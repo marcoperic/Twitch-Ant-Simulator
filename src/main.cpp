@@ -19,7 +19,16 @@ int main()
 	sf::ContextSettings settings;
     sf::Font font;
     Conf::loadUserConf();
-    font.loadFromFile("res/font.ttf");
+
+    if (!font.loadFromFile("res/font.ttf"))
+    {
+        int i = 0;
+        while(!font.loadFromFile("res/font.ttf") && ++i < 10)
+        {
+            std::cout << "font.ttf failed to load... Trying again. (" << i << ")" << endl;
+        }
+    }
+    
     TextControl tc(font);
 	settings.antialiasingLevel = 4;
     int32_t window_style = Conf::USE_FULLSCREEN ? sf::Style::Fullscreen : sf::Style::Default;
@@ -56,6 +65,7 @@ int main()
                 window.draw(tc.getText(simulation.vstat, true));
             }
 
+            if (poll_clock.getElapsedTime().asSeconds() > 60) // every 1 minutes start the poll
             {
                 simulation.cl_cont.server_Create_Poll("_ " + simulation.getCurrentColoniesStr());
                 poll_clock.restart();
