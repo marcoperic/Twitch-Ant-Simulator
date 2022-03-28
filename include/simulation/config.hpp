@@ -8,6 +8,8 @@
 #include <stdlib.h>
 namespace fs = std::filesystem;
 
+#define FONT_DIR "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\font.ttf"
+#define RES_DIR "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\"
 
 template<typename T>
 struct DefaultConf
@@ -35,11 +37,15 @@ struct DefaultConf
 
 	static void loadTextures()
 	{
+        string res(RES_DIR);
+        string ant_dir = res + "ant.png";
+        string marker_dir = res + "marker.png";
+
 		DefaultConf::ANT_TEXTURE = std::make_shared<sf::Texture>();
-		DefaultConf::ANT_TEXTURE->loadFromFile("res/ant.png");
+		DefaultConf::ANT_TEXTURE->loadFromFile(ant_dir);
 		DefaultConf::ANT_TEXTURE->setSmooth(true);
 		DefaultConf::MARKER_TEXTURE = std::make_shared<sf::Texture>();
-		DefaultConf::MARKER_TEXTURE->loadFromFile("res/marker.png");
+		DefaultConf::MARKER_TEXTURE->loadFromFile(marker_dir);
 		DefaultConf::MARKER_TEXTURE->setSmooth(true);
 	}
 
@@ -52,7 +58,7 @@ struct DefaultConf
     static const std::string chooseMap()
     {
         vector<std::string> maps;
-        std::string path = "res\\";
+        std::string path = RES_DIR;
         for (const auto & entry : fs::directory_iterator(path))
         {
             if (entry.path().u8string().find("map") != string::npos)

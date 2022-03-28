@@ -19,7 +19,7 @@ int main()
 	sf::ContextSettings settings;
     sf::Font font;
     Conf::loadUserConf();
-    font.loadFromFile("res/font.ttf");
+    font.loadFromFile(FONT_DIR);
     
     TextControl tc(font);
 	settings.antialiasingLevel = 4;

@@ -115,7 +115,7 @@ struct Ant
 
 	void removeFromWorldGrid(World& world)
 	{
-		ColonyCell& cell = world.map.get(position).markers[col_id];
+		ColonyCell& cell = world.map.get(position).markers[col_id]; // Causing out of bounds due to figures greater than dimension of window.  Ex. y = 1080.01575 > 1080.0
 		if (cell.current_ant == id) {
 			cell.current_ant = -1;
 		}
