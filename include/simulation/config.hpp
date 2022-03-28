@@ -8,6 +8,7 @@
 #include <stdlib.h>
 namespace fs = std::filesystem;
 
+// absolute directory ; directories
 #define FONT_DIR "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\font.ttf"
 #define RES_DIR "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\"
 
