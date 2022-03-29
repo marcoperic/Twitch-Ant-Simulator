@@ -19,7 +19,11 @@ int main()
 	sf::ContextSettings settings;
     sf::Font font;
     Conf::loadUserConf();
-    font.loadFromFile(FONT_DIR);
+    if (!font.loadFromFile(FONT_DIR))
+    {
+        cout << "File loading failure!" << endl;
+        return 0;
+    }
     
     TextControl tc(font);
 	settings.antialiasingLevel = 4;
