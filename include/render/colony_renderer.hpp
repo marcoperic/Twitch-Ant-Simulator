@@ -3,6 +3,7 @@
 #include "simulation/config.hpp"
 #include "simulation/colony/colony.hpp"
 #include "common/circular_gauge.hpp"
+#include "editor/center-text-control.hpp"
 
 
 struct PopulationChart
@@ -26,8 +27,7 @@ struct PopulationChart
 		: population(800, sf::Vector2f(800.0f, 100.0f), sf::Vector2f())
 		, population_update(3.0f)
 	{
-		font.loadFromFile(FONT_DIR);
-		text.setFont(font);
+		text.setFont(*Conf::GLOBAL_FONT);
 	}
 
 	void configure(sf::Vector2f pos, sf::Vector2f size_)
@@ -102,8 +102,7 @@ struct ColonyRenderer
 		, ants_food_va(sf::Quads, 4 * Conf::ANTS_COUNT) // vector out of bounds because of limited amount of space? increased from 4 to 8.
 		, colony_ref(colony)
 	{
-		font.loadFromFile(FONT_DIR);
-		text.setFont(font);
+		text.setFont(*Conf::GLOBAL_FONT);
 
         initializeAntsVA();
 		for (uint64_t i(Conf::ANTS_COUNT-1); i--;) {

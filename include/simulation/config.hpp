@@ -31,10 +31,12 @@ struct DefaultConf
 	static uint32_t ANTS_COUNT;
 	static std::shared_ptr<sf::Texture> ANT_TEXTURE;
 	static std::shared_ptr<sf::Texture> MARKER_TEXTURE;
+    static std::shared_ptr<sf::Font> DefaultConf<T>::GLOBAL_FONT;
     static constexpr uint32_t MAX_COLONIES_COUNT = 4;
 	static sf::Color COLONY_COLORS[MAX_COLONIES_COUNT];
     static uint32_t USE_FULLSCREEN;
     static float GUI_SCALE;
+
 
 	static void loadTextures()
 	{
@@ -48,12 +50,15 @@ struct DefaultConf
 		DefaultConf::MARKER_TEXTURE = std::make_shared<sf::Texture>();
 		DefaultConf::MARKER_TEXTURE->loadFromFile(marker_dir);
 		DefaultConf::MARKER_TEXTURE->setSmooth(true);
+        DefaultConf::GLOBAL_FONT = std::make_shared<sf::Font>();
+        DefaultConf::GLOBAL_FONT->loadFromFile(FONT_DIR);
 	}
 
 	static void freeTextures()
 	{
 		DefaultConf::ANT_TEXTURE = nullptr;
 		DefaultConf::MARKER_TEXTURE = nullptr;
+        DefaultConf::GLOBAL_FONT = nullptr;
 	}
 
     static const std::string chooseMap()
@@ -145,6 +150,8 @@ template<typename T>
 std::shared_ptr<sf::Texture> DefaultConf<T>::ANT_TEXTURE;
 template<typename T>
 std::shared_ptr<sf::Texture> DefaultConf<T>::MARKER_TEXTURE;
+template<typename T>
+std::shared_ptr<sf::Font> DefaultConf<T>::GLOBAL_FONT;
 template<typename T>
 sf::Color DefaultConf<T>::COLONY_COLORS[MAX_COLONIES_COUNT] = {sf::Color::Red, sf::Color::Blue, sf::Color::Yellow, sf::Color(50, 255, 255)};
 

@@ -19,13 +19,7 @@ int main()
 	sf::ContextSettings settings;
     sf::Font font;
     Conf::loadUserConf();
-    if (!font.loadFromFile(FONT_DIR))
-    {
-        cout << "File loading failure!" << endl;
-        return 0;
-    }
-    
-    TextControl tc(font);
+    Conf::loadTextures();
 	settings.antialiasingLevel = 4;
     int32_t window_style = Conf::USE_FULLSCREEN ? sf::Style::Fullscreen : sf::Style::Default;
 	sf::RenderWindow window(sf::VideoMode(Conf::WIN_WIDTH, Conf::WIN_HEIGHT), "AntSim", window_style, settings);
@@ -44,6 +38,7 @@ int main()
         std::shared_ptr<TimeController> timer = scene->getByName<TimeController>("timer");
         clock.restart();
         poll_clock.restart();
+        TextControl tc(*Conf::GLOBAL_FONT);
         // start simulation immediately after booting up.
         timer->current_state = TimeController::State::Play;
         timer->select(TimeController::State::Play);
@@ -87,5 +82,7 @@ int main()
 
         cout << "Instance ended ... Going to restart." << endl;
     }
-	return 0;
+
+    Conf::freeTextures();
+	return 1;
 }

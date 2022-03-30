@@ -22,8 +22,8 @@ struct TextLabel : public Item
         , alignment(Alignment::Center)
     {
         padding = 1.0f;
-        font.loadFromFile(FONT_DIR);
-        text.setFont(font);
+        //font.loadFromFile(FONT_DIR);
+        text.setFont(*Conf::GLOBAL_FONT);
         text.setCharacterSize(char_size);
         setColor({100, 100, 100});
         setText(label);

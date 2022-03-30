@@ -9,7 +9,7 @@ struct TextControl
     VictoryStatus vstat;
 
     explicit
-    TextControl(sf::Font& font)
+    TextControl(sf::Font font)
     {
         myFont = font;
     }
@@ -34,6 +34,11 @@ struct TextControl
 
         std::cout << "Problem in text control" << std::endl;
         return getResetText();
+    }
+
+    sf::Font getFont()
+    {
+        return myFont;
     }
 
     sf::Text getStartText()
