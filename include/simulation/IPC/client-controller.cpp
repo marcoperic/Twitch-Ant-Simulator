@@ -8,15 +8,14 @@ using namespace std;
 
 vector<string> commands;
 vector<string> split(string s, string delimiter);
+void server_Create_Poll(string active_colonies);
 void getCommands(const char* str);
 void debug();
 
 // Extern C 
 void relay(const char* str)
 {
-    // printf("%s\n", str);
     getCommands(str);
-    // debug();
 }
 // Extern C
 
@@ -41,6 +40,15 @@ typedef struct client_controller
         commands.clear();
         cout << "Command list cleared.\n";
         return retList;
+    }
+
+    void server_Create_Poll(string active_colonies) // c_str() for str to char*
+    {
+        const char* temp = active_colonies.c_str();
+        server_code = (char*)malloc(strlen(temp) + 1);
+        strcpy(server_code, temp);
+        printf("%s\n", server_code);
+        cout << "Relaying create poll to server." << endl;
     }
 
     bool isReady()
@@ -82,14 +90,7 @@ void getCommands(const char* str)
     string temp(str);
     vector<string> tokens = split(temp, ";");
     commands = tokens;
-    commands.pop_back(); // erase the last element
+
+    // if (commands.size() > 0)
+    //     commands.pop_back(); // erase the last element
 }
-
-
-// compile with g++ client-controller.cpp -lzmq -pthread
-// int main()
-// {
-//     client_controller c;
-//     // start_client();
-//     return 0;
-// }

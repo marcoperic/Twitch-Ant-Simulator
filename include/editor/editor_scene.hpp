@@ -38,14 +38,14 @@ struct EditorScene : public GUI::Scene
     {
         root.padding = 20.0f;
 
-        Conf::loadTextures();
+        // Conf::loadTextures();
         initialize();
     }
 
     ~EditorScene()
     {
         std::cout << "Exiting, clean resources" << std::endl;
-        Conf::freeTextures();
+        // Conf::freeTextures();
     }
     
     void initialize()

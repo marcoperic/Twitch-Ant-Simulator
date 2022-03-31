@@ -21,16 +21,18 @@
 struct Simulation
 {
 	civ::Vector<Colony> colonies;
+    vector<uint8_t> extinct_colonies;
 	World world;
 	Renderer renderer;
 	EventSate ev_state;
 	FightSystem fight_system;
 	sf::Clock clock;
     AsyncDistanceFieldBuilder distance_field_builder;
-    client_controller c;
+    client_controller cl_cont;
     vector<tuple<float, float>> spawnPoints;
     VictoryStatus vstat;
     bool isRunning = true;
+    int num_cols = 4;
 
     explicit
 	Simulation(sf::Window& window)
@@ -70,27 +72,81 @@ struct Simulation
            if (cmd.at(0) == 'S') // spawn ant
            {
                char color = cmd.at(1);
+               int quantity = stoi(cmd.substr(2));
                bool found = true;
                Colony& c = findColonyByColor(color, &found);
 
                if (!found)
                 continue;
 
-               c.createWorker();
+               if (quantity == 1)
+               {
+                    c.createWorker();
+               }
+               else
+               {
+                   c.createNWorker(quantity);
+               }
+
                cout << "Spawned ant" << endl;
            }
            else if (cmd.at(0) == 'F') // spawn food
            {
                char color = cmd.at(1);
+               int quantity = stoi(cmd.substr(2));
                bool found = true;
                Colony& c = findColonyByColor(color, &found);
 
                if (!found)
                 continue;
 
-               sf::Vector2f coords = c.base.position;
-               sf::Vector2f new_coords = c.radialNoise(coords, 125); // 125px radius?
-               world.addFoodAt(new_coords.x, new_coords.y, 10); // spawn food at coords
+               if (quantity == 1)
+               {
+                    sf::Vector2f coords = c.base.position;
+                    sf::Vector2f new_coords = c.radialNoise(coords, 75); // 125px radius?
+                    world.addFoodAt(new_coords.x, new_coords.y, 10); // spawn food at coords
+               }
+               else
+               {
+                   vector<sf::Vector2f> pos = c.set_radialNoise(c.base.position, 75, quantity);
+                   world.addNFoodAt(pos, 10, quantity);
+               }
+           }
+           else if (cmd.at(0) == 'K') // No quantity check necessary as these will only be sent by server.
+           {
+               char color = cmd.at(1);
+               int quantity = stoi(cmd.substr(2));
+               bool found = true;
+               Colony& c = findColonyByColor(color, &found);
+
+               if (!found)
+                continue;
+
+               c.killNAnts(world, quantity);
+           }
+           else if (cmd.at(0) == 'Q')
+           {
+               char color = cmd.at(1);
+               int quantity = stoi(cmd.substr(2));
+               bool found = true;
+               Colony& c = findColonyByColor(color, &found);
+
+               if (!found)
+                continue;
+
+               c.increaseAntSpeed(quantity / 1.0);  
+           }
+           else if (cmd.at(0) == 'M')
+           {
+               char color = cmd.at(1);
+               int quantity = stoi(cmd.substr(2));
+               bool found = true;
+               Colony& c = findColonyByColor(color, &found);
+
+               if (!found)
+                continue;
+
+               c.increaseSpawnRate(quantity / 10.0);
            }
            else if (cmd.at(0) == '@')
            {
@@ -141,9 +197,9 @@ struct Simulation
             removeDeadAnts();
 
             // Get incoming data from queue structure to perform operations based on chat interaction
-            if (c.isReady())
+            if (cl_cont.isReady())
             {
-                vector<string> temp = c.fetch();
+                vector<string> temp = cl_cont.fetch();
                 processCommands(temp, dt);
                 temp.clear();
             }
@@ -151,6 +207,18 @@ struct Simulation
             {
                 vector<string> temp = {};
                 processCommands(temp, dt);
+            }
+
+            for (Colony& colony : colonies)
+            {
+                if (colony.ants.size() == 0 && !isExtinct(colony.id))
+                {
+                    extinct_colonies.push_back(colony.id);
+                    colony.setColor(sf::Color(0,0,0,0));
+                    world.addFoodAt(colony.base.position.x, colony.base.position.y, colony.base.food);
+                    colony.base.food = 0;
+                    num_cols--;
+                }
             }
 
 			// Update world cells (markers, density, walls)
@@ -174,31 +242,20 @@ struct Simulation
 				colony.update(dt, world);
 			}
 
-            for (Colony& colony: colonies)
-            {
-                if (colony.ants.size() == 0)
-                {
-                    removeColony(colony.id);
-                }
-            }
-
-            if (colonies.size() == 1)
+            if (num_cols == 1)
             {
                 // Only one colony left? End simulation.
                 //vstat.winner = colonies.get(0).getColorString();
+                for (Colony& colony : colonies)
+                {
+                    if (!isExtinct(colony.id))
+                    {
+                        vstat.winner = colony.getColorString();
+                        break;
+                    }
+                }
                 isRunning = false;
             }
-
-            // Verify that commit #af0375701873821ded1be7f431ba4384d99f640e works
-            // for (Colony& colony : colonies)
-            // {
-            //     if (colony.ants.size() > 135)
-            //     {
-            //         vstat.winner = colony.getColorString();
-            //         isRunning = false;
-            //         break;
-            //     }
-            // }
 
 			// Search for fights
 			fight_system.checkForFights(colonies, world);
@@ -206,6 +263,33 @@ struct Simulation
 			renderer.updateColoniesStats(dt);
 		}
 	}
+
+    string getCurrentColoniesStr()
+    {
+        string ret = "";
+
+        for (Colony& c : colonies)
+        {
+            if (c.getColor() == sf::Color::Red)
+            {
+                ret += "r";
+            }
+            else if (c.getColor() == sf::Color::Blue)
+            {
+                ret += "b";
+            }
+            else if (c.getColor() == sf::Color::Green)
+            {
+                ret += "g";
+            }
+            else if (c.getColor() == sf::Color::Cyan)
+            {
+                ret += "c";
+            }
+        }
+
+        return ret;
+    }
     
     void removeDeadAnts()
     {
@@ -213,7 +297,7 @@ struct Simulation
         for (Colony& colony : colonies) {
             const uint32_t killed = colony.killWeakAnts(world);
             if (killed) {
-                const uint32_t initial_size = to<int32_t>(colony.ants.size());
+                const uint32_t initial_size = to<int32_t>(colony.ants.size()); // Could be cause of dead ants not being removed? May need to scale with new size of VA.
                 renderer.colonies[colony.id].cleanVAs(initial_size - killed, initial_size);
             }
         }
@@ -244,15 +328,40 @@ struct Simulation
 		renderer.render(world, target);
 	}
 
-    void removeColony(uint8_t colony_id)
+    void removeColony_death(uint8_t colony_id)
     {
-
-        for (Colony& c : colonies) {
-            c.stopFightsWith(colony_id);
-        }
         colonies.erase(colony_id);
         renderer.colonies.erase(colony_id);
         world.renderer.colonies_color.erase(colony_id);
         world.clearMarkers(colony_id);
+    }
+
+    void removeColony(uint8_t colony_id)
+    {
+        for (Colony& c : colonies) {
+            if (c.id == colony_id)
+                continue;
+
+            cout << c.getColorString() << " stopping fights with " << unsigned(colony_id) << endl;
+            c.stopFightsWith(colony_id);
+        }
+
+        num_cols--;
+        extinct_colonies.push_back(colony_id);
+        colonies.erase(colony_id);
+        //rescaleIDs(colony_id);
+        renderer.colonies.erase(colony_id);
+        world.renderer.colonies_color.erase(colony_id);
+        world.clearMarkers(colony_id);
+    }
+
+    bool isExtinct(uint8_t colony_id)
+    {
+        if (std::find(extinct_colonies.begin(), extinct_colonies.end(), colony_id) != extinct_colonies.end()) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 };

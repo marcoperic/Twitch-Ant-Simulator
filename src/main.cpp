@@ -7,36 +7,38 @@
 #include "simulation/simulation.hpp"
 #include "editor/editor_scene.hpp"
 #include "editor/center-text-control.hpp"
-
-#define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
-
+#include "common/time_render.hpp"
+#include <time.h>
+#include <stdlib.h>
 using namespace edtr;
-// using namespace std;
 
 int main()
 {
     sf::Clock clock;
+    sf::Clock poll_clock;
 	sf::ContextSettings settings;
     sf::Font font;
-    font.loadFromFile("res/font.ttf");
-    TextControl tc(font);
+    Conf::loadUserConf();
+    Conf::loadTextures();
 	settings.antialiasingLevel = 4;
     int32_t window_style = Conf::USE_FULLSCREEN ? sf::Style::Fullscreen : sf::Style::Default;
 	sf::RenderWindow window(sf::VideoMode(Conf::WIN_WIDTH, Conf::WIN_HEIGHT), "AntSim", window_style, settings);
 	window.setFramerateLimit(60);
 
-    
     while (window.isOpen())
     {
+        srand(time(NULL));
         // Initialize simulation
         Simulation simulation(window);
-        simulation.loadMap(MAP_NAME);
+        // simulation.loadMap(MAP_NAME);
+        simulation.loadMap(Conf::chooseMap());
         // Create editor scene around it
         GUI::Scene::Ptr scene = create<edtr::EditorScene>(window, simulation);
         scene->resize();
         std::shared_ptr<TimeController> timer = scene->getByName<TimeController>("timer");
         clock.restart();
-
+        poll_clock.restart();
+        TextControl tc(*Conf::GLOBAL_FONT);
         // start simulation immediately after booting up.
         timer->current_state = TimeController::State::Play;
         timer->select(TimeController::State::Play);
@@ -54,10 +56,19 @@ int main()
                 window.draw(tc.getText(simulation.vstat, true));
             }
 
+            if (poll_clock.getElapsedTime().asSeconds() > 60) // every 1 minutes start the poll
+            {
+                simulation.cl_cont.server_Create_Poll("_ " + simulation.getCurrentColoniesStr());
+                poll_clock.restart();
+            }
+
+            // Draw timer
+            window.draw(tc.getTimeText(TimeRender::HumanReadableTime(clock.getElapsedTime().asMilliseconds())));
             window.display();
         }
         
         clock.restart();
+
         while (clock.getElapsedTime().asMilliseconds() < 5000)
         {
             // Update
@@ -71,5 +82,7 @@ int main()
 
         cout << "Instance ended ... Going to restart." << endl;
     }
-	return 0;
+
+    Conf::freeTextures();
+	return 1;
 }

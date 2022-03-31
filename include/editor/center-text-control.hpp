@@ -9,7 +9,7 @@ struct TextControl
     VictoryStatus vstat;
 
     explicit
-    TextControl(sf::Font& font)
+    TextControl(sf::Font font)
     {
         myFont = font;
     }
@@ -36,9 +36,14 @@ struct TextControl
         return getResetText();
     }
 
+    sf::Font getFont()
+    {
+        return myFont;
+    }
+
     sf::Text getStartText()
     {
-        sf::Text text("Ant simulation started! Choose a colony and help them dominate!", myFont, 50);
+        sf::Text text("Simulation started! Enter commands in chat and coordinate with each other to help a colony win!", myFont, 32);
         sf::FloatRect textRect = text.getLocalBounds();
         text.setOrigin(textRect.left + textRect.width / 2.0f,
             textRect.top + textRect.height / 2.0f);
@@ -67,6 +72,18 @@ struct TextControl
         text.setOrigin(textRect.left + textRect.width / 2.0f,
             textRect.top + textRect.height / 2.0f);
         text.setPosition(sf::Vector2f(Conf::WIN_WIDTH / 2.0f, Conf::WIN_HEIGHT / 2.0f));
+        text.setColor(sf::Color::Red);
+
+        return text;
+    }
+
+    sf::Text getTimeText(std::string time)
+    {
+        sf::Text text(time, myFont, 50);
+        sf::FloatRect textRect = text.getLocalBounds();
+        text.setOrigin(textRect.left + textRect.width / 2.0f,
+            textRect.top + textRect.height / 2.0f);
+        text.setPosition(sf::Vector2f(Conf::WIN_WIDTH / 2.0f, 20));
         text.setColor(sf::Color::Red);
 
         return text;

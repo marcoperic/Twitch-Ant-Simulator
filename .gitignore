@@ -6,3 +6,7 @@ cmake-*/
 compile_commands.json
 .DS_Store
 demo*/
+.vs/AntSimulator/v16/Browse.VC.db
+.vs/AntSimulator/v16/.suo
+.vs/AntSimulator/v16/Solution.VC.db
+AntSimulator.dmp

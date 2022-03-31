@@ -45,6 +45,7 @@ struct TimeController : public GUI::NamedContainer
 
         tool_speed = create<GUI::NamedToggle>("Full Speed");
         tool_speed->setWidth(70.0f);
+        tool_speed->setState(true); // start on full speed
         watch(tool_speed, [this]{
             notifyChanged();
         });

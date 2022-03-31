@@ -18,6 +18,7 @@ using namespace std;
 
 struct Colony
 {
+
 	ColonyBase       base;
 	uint32_t         max_ants_count;
 	civ::Vector<Ant> ants;
@@ -29,6 +30,7 @@ struct Colony
 	uint64_t         ant_creation_id  = 0;
     bool             color_changed    = false;
     bool             position_changed = false;
+	float 			 ant_cost = 4.0f;
 
 
     Colony() = default;
@@ -48,7 +50,7 @@ struct Colony
     {
         id = colony_id;
         base.food = 0.0f;
-        uint32_t ants_count = 128;
+        uint32_t ants_count = 275;
         for (uint32_t i(ants_count); i--;) {
             createWorker();
         }
@@ -77,6 +79,17 @@ struct Colony
 		ant.type = Ant::Type::Worker;
 		return ant;
 	}
+
+	void createNWorker(int n)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			createWorker();
+		}
+
+		cout << "creating " + to_string(n) + " workers" << endl;
+	}
+	
 
 	void specializeSoldier(Ant& ant)
 	{
@@ -111,7 +124,7 @@ struct Colony
 
 	void createNewAnts(float dt)
 	{
-		const float ant_cost = 4.0f;
+		// const float ant_cost = 4.0f;
 		if (ants_creation_cooldown.updateAutoReset(dt) && isNotFull()) {
 			if (mustCreateSoldier()) {
 				if (base.useFood(3.0f * ant_cost)) {
@@ -149,6 +162,46 @@ struct Colony
 		}
 		for (uint64_t ant_id : to_remove) {
 			ants.erase(ant_id);
+		}
+	}
+
+	void increaseSpawnRate(float modifier)
+	{
+		ant_cost -= modifier;
+	}
+
+	void increaseAntSpeed(float modifier)
+	{
+		for (Ant& current : ants)
+		{
+			current.move_speed += modifier;
+		}
+	}
+
+	void testKill(World& w)
+	{
+		int ct = 0;
+
+			for (Ant& current : ants)
+			{
+				if (ct++ > 100)
+					break;
+
+				current.kill(w);
+				ants.erase(current.id);
+			}
+	}
+
+	void killNAnts(World& w, int quantity)
+	{
+		int ct = 0;
+		for (Ant& current: ants)
+		{
+			if (ct++ > quantity)
+				break;
+			
+			current.kill(w);
+			ants.erase(current.id);
 		}
 	}
     
@@ -206,23 +259,36 @@ struct Colony
 
     void stopFightsWith(uint8_t colony_id)
     {
-        for (Ant& a : ants) {
-            if (a.target) {
-                a.fight_mode = FightMode::NoFight;
-                if (a.target->col_id == colony_id) {
-                    a.target = {};
-                }
-            }
-        }
+		if (ants.size() > 0)
+		{
+			for (Ant& a : ants) {
+				if (a.target) {
+					a.fight_mode = FightMode::NoFight;
+					if (a.target->col_id == colony_id) {
+						a.target = {};
+					}
+				}
+			}
+		}
     }
 
 	sf::Vector2f radialNoise(sf::Vector2f v, float radius)
 	{
-		float rand = RNGf::getRange(0.0f, 1.0f);
-		float r = radius * sqrt(rand);
-		float theta = rand * 2 * PI;
+		float rannum = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+		float r = radius * sqrt(rannum);
+		float theta = rannum * 2 * PI;
 		float x = (v.x + r * cos(theta));
 		float y = (v.y + r * sin(theta));
 		return sf::Vector2f({x, y});
+	}
+
+	vector<sf::Vector2f> set_radialNoise(sf::Vector2f v, float radius, int n)
+	{
+		vector<sf::Vector2f> ret;
+
+		for (int i = 0; i < n; i++)
+			ret.push_back(radialNoise(v, radius));
+
+		return ret;
 	}
 };
