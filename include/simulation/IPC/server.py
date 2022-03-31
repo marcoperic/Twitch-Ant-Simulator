@@ -7,7 +7,7 @@ BUFFER_SIZE = 32 # Update this in C whenever modified.
 UPDATE_INTERVAL = 5 # How many seconds between command transmissions
 
 # spawn, feed, quick (speed), kill, more ants (lower food req for spawning)
-poll_codes = ['s', 'f', 'q', 'k', 'm']
+poll_codes = ['s', 'f', 'q', 'm']
 
 def get_key(val, colors):
     for key, value in colors.items():
@@ -21,8 +21,10 @@ def encode(cmd_q):
     for i in cmd_q:
         output += ("" + str(i) + ";")
 
-    if (len(output) < BUFFER_SIZE):
+    if (len(output) < BUFFER_SIZE - 1):
         output = output + ("-" * (BUFFER_SIZE - len(output)))
+
+    output += '\x00' # end string in null terminator
 
     return output
         
