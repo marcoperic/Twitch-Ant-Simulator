@@ -3,7 +3,6 @@
 #include "simulation/config.hpp"
 #include "simulation/colony/colony.hpp"
 #include "common/circular_gauge.hpp"
-#include "editor/center-text-control.hpp"
 
 
 struct PopulationChart

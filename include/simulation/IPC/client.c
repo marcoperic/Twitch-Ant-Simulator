@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "client-controller.h"
-#define BUFFER_SIZE 32 // Be sure to update in Python class.
+#define BUFFER_SIZE 33 // Be sure to update in Python class.
 
 char* server_code = NULL;
 

@@ -3,7 +3,7 @@ import zmq
 import _thread
 import random
 
-BUFFER_SIZE = 32 # Update this in C whenever modified.
+BUFFER_SIZE = 33 # Update this in C whenever modified.
 UPDATE_INTERVAL = 5 # How many seconds between command transmissions
 
 # spawn, feed, quick (speed), kill, more ants (lower food req for spawning)
@@ -21,7 +21,7 @@ def encode(cmd_q):
     for i in cmd_q:
         output += ("" + str(i) + ";")
 
-    if (len(output) < BUFFER_SIZE - 1):
+    if (len(output) < BUFFER_SIZE):
         output = output + ("-" * (BUFFER_SIZE - len(output)))
 
     output += '\x00' # end string in null terminator
@@ -140,4 +140,5 @@ class Server:
                 print("Clearing command queue.")
                 self.command_queue.clear()
             else:
-                socket.send(b"-" * BUFFER_SIZE)
+                # socket.send(b"-" * 10 + b'\x00')
+                socket.send_string("-" * (BUFFER_SIZE - 1) + '\x00')
