@@ -60,7 +60,7 @@ struct EditorScene : public GUI::Scene
         watch(display_controls, [this](){
             updateRenderOptions();
         });
-        toolbox->addItem(display_controls);
+        // toolbox->addItem(display_controls);
 
         // Add map edition tools
         auto tools = create<GUI::NamedContainer>("Edit Map", GUI::Container::Orientation::Vertical);
@@ -80,7 +80,7 @@ struct EditorScene : public GUI::Scene
         });
 
         tools->header->addItem(tools_toggle);
-        toolbox->addItem(tools);
+        // toolbox->addItem(tools);
 
         tool_selector = create<ToolSelector>(control_state, simulation);
         tools->addItem(tool_selector);

@@ -116,6 +116,22 @@ struct NamedToggle : public Container
         });
     }
 
+    //explicit
+    //    NamedToggle(const std::string& name, SPtr<ColonyStats> stat)
+    //    : Container(Container::Orientation::Vertical)
+    //{
+    //    padding = 0.0f;
+    //    size_type.y = Size::FitContent;
+    //    Container::addItem(create<TextLabel>(name, 12));
+    //    toggle = create<Toggle>();
+    //    Container::addItem(toggle);
+    //    Container::addItem(stat);
+
+    //        watch(toggle, [this]() {
+    //        notifyChanged();
+    //            });
+    //}
+
     [[nodiscard]]
     bool getState() const
     {

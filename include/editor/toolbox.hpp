@@ -14,7 +14,7 @@ struct Toolbox : public GUI::NamedContainer
 {
     explicit
     Toolbox(sf::Vector2f size_, sf::Vector2f position_ = {})
-        : GUI::NamedContainer("Toolbox", GUI::Container::Orientation::Vertical)
+        : GUI::NamedContainer("Colony Statistics", GUI::Container::Orientation::Vertical)
     {
         header->addItem(create<GUI::EmptyItem>());
         auto tools_toggle = create<GUI::Toggle>();
