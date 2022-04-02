@@ -82,12 +82,13 @@ struct Colony
 
 	void createNWorker(int n)
 	{
-		for (int i = 0; i < n; i++)
+		int i;
+		for (i = 0; ants.size() < Conf::ANTS_COUNT && i < n; i++)
 		{
 			createWorker();
 		}
 
-		cout << "creating " + to_string(n) + " workers" << endl;
+		cout << "creating " + to_string(i) + " workers" << endl;
 	}
 	
 
@@ -243,7 +244,7 @@ struct Colony
 		}
 		else if (color == sf::Color::Cyan)
 		{
-			color_string == "cyan";
+			color_string = "cyan";
 		}
 		else if (color == sf::Color::Blue)
 		{

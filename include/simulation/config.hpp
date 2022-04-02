@@ -153,7 +153,7 @@ std::shared_ptr<sf::Texture> DefaultConf<T>::MARKER_TEXTURE;
 template<typename T>
 std::shared_ptr<sf::Font> DefaultConf<T>::GLOBAL_FONT;
 template<typename T>
-sf::Color DefaultConf<T>::COLONY_COLORS[MAX_COLONIES_COUNT] = {sf::Color::Red, sf::Color::Blue, sf::Color::Yellow, sf::Color(50, 255, 255)};
+sf::Color DefaultConf<T>::COLONY_COLORS[MAX_COLONIES_COUNT] = {sf::Color::Red, sf::Color::Blue, sf::Color::Green, sf::Color::Cyan};
 
 template<typename T>
 uint32_t DefaultConf<T>::USE_FULLSCREEN = 1;

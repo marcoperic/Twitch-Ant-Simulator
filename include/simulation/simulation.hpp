@@ -250,6 +250,7 @@ struct Simulation
                 {
                     if (!isExtinct(colony.id))
                     {
+                        cout << colony.getColorString() << endl;
                         vstat.winner = colony.getColorString();
                         break;
                     }

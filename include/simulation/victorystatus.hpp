@@ -14,7 +14,7 @@ struct VictoryStatus
 
     void clear()
     {
-        winner = "";
+        winner = "cyan";
         color = sf::Color::Black;
         interrupted = false;
     }
