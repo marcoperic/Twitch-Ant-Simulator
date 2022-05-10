@@ -33,16 +33,62 @@ struct ColonyCreator : public GUI::NamedContainer
         // add_button->setWidth(32.0f, GUI::Size::Fixed);
         // add_button->setHeight(20.0f, GUI::Size::Fixed);
         header->addItem(create<GUI::EmptyItem>());
-        // header->addItem(add_button
+        // header->addItem(add_button);
+        
     }
 
     void spawnColonies()
     {
         for (tuple<float, float> col: simulation.spawnPoints)
         {
+            do
+            {
+                tuple<float, float> temp = radialNoise(col, 300); // 300px radius of spawning possibility.
+
+                if (!(get<0>(temp) < Conf::WIN_WIDTH && get<1>(temp) < Conf::WIN_HEIGHT) || !(get<0>(temp) > 0 && get<1>(temp) > 0))
+                    continue;
+
+                const auto& cell = simulation.world.map.getCst(sf::Vector2f(get<0>(temp), get<1>(temp)));
+                if (cell.wall || cell.food)
+                    continue;
+
+                if (radiusIntersectsWall(temp, 12)) // 12px clearance from food and wall.
+                    continue;
+
+                col = temp;
+                break;
+
+            } while (true);
+
+
+
             this->createColony(get<0>(col), get<1>(col));
         }
     }
+
+    bool radiusIntersectsWall(tuple<float, float> c, int radius)
+    {
+        for (int i = 1; i <= 360; i++)
+        {
+            float radians = i * PI / 180;
+            tuple<float, float> point = { get<0>(c) + radius * cos(radians), get<1>(c) + radius * sin(radians) };
+            const auto& cell = simulation.world.map.getCst(sf::Vector2f(get<0>(point), get<1>(point)));
+            if (cell.wall || cell.food)
+                return true;
+        }
+
+        return false;
+    }
+
+	tuple<float, float> radialNoise(tuple<float, float> v, float radius)
+	{
+		float rannum = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+		float r = radius * sqrt(rannum);
+		float theta = rannum * 2 * PI;
+		float x = (get<0>(v) + r * cos(theta));
+		float y = (get<1>(v) + r * sin(theta));
+		return {x, y};
+	}
 
     void createColony(float x, float y)
     {
@@ -52,6 +98,7 @@ struct ColonyCreator : public GUI::NamedContainer
             auto colony_tool = create<ColonyTool>(new_colony, control_state);
             colony_tool->setColor(temp = assignColor());
             colony_tool->colony->ants_color = temp;
+            //colony_tool->stats_toggle->setState(true);
             colony_tool->on_select = [this](int8_t id){
                 select(id);
             };
