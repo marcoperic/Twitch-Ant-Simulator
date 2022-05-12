@@ -14,8 +14,8 @@ struct ViewportHandler
         sf::Vector2f mouse_world_position;
         sf::RenderStates state;
 
-        State(sf::Vector2f render_size, const float base_zoom = 5.0f)
-            : center(render_size.x * 0.5f, render_size.y * 0.5f)
+        State(sf::Vector2f render_size, const float base_zoom = 5.0f) // originally 5.0f
+            : center(render_size.x * 0.5f - 150, render_size.y * 0.5f - 10) // make the center offset
             , offset(center / base_zoom)
             , zoom(base_zoom)
             , clicking(false)
@@ -58,7 +58,7 @@ struct ViewportHandler
 
     void zoom(float f)
     {
-        state.zoom *= f;
+        state.zoom = 0.85f;
         state.updateState();
     }
 

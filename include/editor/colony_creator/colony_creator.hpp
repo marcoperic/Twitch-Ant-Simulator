@@ -61,7 +61,6 @@ struct ColonyCreator : public GUI::NamedContainer
             } while (true);
 
 
-
             this->createColony(get<0>(col), get<1>(col));
         }
     }

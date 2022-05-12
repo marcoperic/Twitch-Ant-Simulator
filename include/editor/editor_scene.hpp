@@ -54,7 +54,7 @@ struct EditorScene : public GUI::Scene
 
         renderer = create<WorldView>(toVector2f(window_size), simulation, control_state);
 
-        toolbox = create<Toolbox>(sf::Vector2f{350.0f, to<float>(window_size.y)}, sf::Vector2f{root.padding, root.padding});
+        toolbox = create<Toolbox>(sf::Vector2f{300.0f, to<float>(window_size.y)}, sf::Vector2f{root.padding, root.padding});
         // Add display options
         display_controls = create<DisplayOption>(control_state);
         watch(display_controls, [this](){
