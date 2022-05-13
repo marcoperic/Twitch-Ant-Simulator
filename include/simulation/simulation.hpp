@@ -162,6 +162,12 @@ struct Simulation
            {
                return;
            }
+
+        }
+        
+        if (commands.size() > 0)
+        {
+            cout << "Commands processed: " << commands.size() << endl;
         }
     }
 

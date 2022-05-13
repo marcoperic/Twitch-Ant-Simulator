@@ -3,7 +3,7 @@ import zmq
 import _thread
 import random
 
-BUFFER_SIZE = 33 # Update this in C whenever modified.
+BUFFER_SIZE = 257 # Update this in C whenever modified. Approximately 64 commands fit in this buffer size.
 UPDATE_INTERVAL = 5 # How many seconds between command transmissions
 
 # spawn, feed, quick (speed), kill, more ants (lower food req for spawning)

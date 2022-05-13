@@ -139,6 +139,25 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
                 else:
                     c.privmsg(self.channel, "Too many arguments! Please try !feed color")
 
+        # Usage: !debug spawn 100 -- spawns 100 ants randomly
+        elif cmd == 'debug':
+            cmd = args[1]
+            quantity = args[2]
+
+            if cmd == 'spawn':
+                cmd = 'S'
+            elif cmd == 'feed':
+                cmd = 'F'
+
+            
+            for i in range(0, int(quantity)):
+                temp = cmd
+                temp += self.cvar.colors[random.choice(list(self.cvar.colors))]
+                temp += '1'
+                print('DEBUG: ' + temp)
+                self.cvar.pushCmd(temp)
+
+
 def main():
     if len(sys.argv) == 5:
         print("Usage: twitchbot <username> <client id> <token> <channel>")

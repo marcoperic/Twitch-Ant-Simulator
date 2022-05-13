@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "client-controller.h"
-#define BUFFER_SIZE 33 // Be sure to update in Python class.
+#define BUFFER_SIZE 257 // Be sure to update in Python class.
+// Approximately 64 commands can fit in this buffer.
 
 char* server_code = NULL;
 
