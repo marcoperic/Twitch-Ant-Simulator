@@ -92,6 +92,11 @@ class Server:
             poll_data = {'title': 'Vote for a colony to increase spawn rate!',
                          'choices' : colonies}
 
+        elif (type == 'E'):
+            self.poll_info.append('E_')
+            poll_data = {'title': 'Things seem a bit slow... 😴 End the simulation early?',
+                         'choices' : [{'title': 'Yes'}, {'title': 'No'}]}
+
         self.chatbot.create_poll(poll_data)
 
     def init_threading(self):
@@ -129,7 +134,11 @@ class Server:
                 print('Attempting to start poll')
                 cols = message[1:]
                 self.startPoll(poll_codes[getRandomCode()], cols)
-                # self.startPoll(poll_codes[4], cols)
+
+            elif (message[0] == '!'):
+                print('Attempting to start early-stopping poll')
+                cols = message[1:]
+                self.startPoll('E', cols)
 
             # Check to see if object has been populated with commands from user. If greater than one, send commands down pipeline.
             time.sleep(UPDATE_INTERVAL)

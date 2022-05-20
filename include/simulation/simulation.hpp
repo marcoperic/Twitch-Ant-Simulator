@@ -33,6 +33,8 @@ struct Simulation
     VictoryStatus vstat;
     bool isRunning = true;
     int num_cols = 4;
+    unordered_map<string, uint64_t> tracked_populations;
+    bool earlyStoppingPoll = false;
 
     explicit
 	Simulation(sf::Window& window)
@@ -158,9 +160,23 @@ struct Simulation
                    break;
                }
            }
+           else if (cmd.at(0) == 'E')
+           {
+               string stop = cmd.substr(1);
+               if (stop == "Yes") // Restart if poll is YES.
+               {
+                   vstat.interrupted = true;
+                   isRunning = false;
+                   break;
+               }
+               else
+               {
+                   earlyStoppingPoll = false;
+               }
+           }
            else
            {
-               return;
+               return; // Maybe remove this?
            }
 
         }
@@ -215,6 +231,34 @@ struct Simulation
                 processCommands(temp, dt);
             }
 
+            // Implement early stopping. If there are fewer than n deaths in 15 seconds, create poll.
+            if (num_cols == 2 && clock.getElapsedTime().asSeconds() > 15 && earlyStoppingPoll == false)
+            {
+                const int N_DEATHS = 10;
+                int total = 0;
+                
+                // Look through all colonies and check population change.
+                for (Colony& colony: colonies)
+                {
+                    if (colony.ants.size() > 0 && !isExtinct(colony.id))
+                    {
+                        if (tracked_populations[colony] != -1)
+                        {
+                            total += (tracked_populations[colony] - colony.ants.size());
+                        }
+                    }
+                    
+                    tracked_populations[colony] = colony.ants.size();
+                }
+
+                // If both colonies saw fewer than N_DEATHS, start poll.
+                if (total < N_DEATHS)
+                {
+                    earlyStoppingPoll = true;
+                    cl_cont.server_Create_Poll("!" + getCurrentColoniesStr());
+                }
+            }
+
             for (Colony& colony : colonies)
             {
                 if (colony.ants.size() == 0 && !isExtinct(colony.id))
@@ -224,6 +268,20 @@ struct Simulation
                     world.addFoodAt(colony.base.position.x, colony.base.position.y, colony.base.food);
                     colony.base.food = 0;
                     num_cols--;
+                }
+
+                // Only two colonies remain. Start clock and initialize population tracking.
+                if (num_cols == 2)
+                {
+                    for (Colony& colony: colonies)
+                    {
+                        if (colony.ants.size() == 0 && !isExtinct(colony.id))
+                        {
+                            tracked_populations[colony.getColorString] = -1;
+                        }
+                    }
+
+                    clock.restart();
                 }
             }
 
@@ -261,6 +319,7 @@ struct Simulation
                         break;
                     }
                 }
+
                 isRunning = false;
             }
 
