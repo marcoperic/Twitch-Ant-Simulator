@@ -242,13 +242,13 @@ struct Simulation
                 {
                     if (colony.ants.size() > 0 && !isExtinct(colony.id))
                     {
-                        if (tracked_populations[colony] != -1)
+                        if (tracked_populations[colony.getColorString()] != -1)
                         {
-                            total += (tracked_populations[colony] - colony.ants.size());
+                            total += (tracked_populations[colony.getColorString()] - colony.ants.size());
                         }
                     }
                     
-                    tracked_populations[colony] = colony.ants.size();
+                    tracked_populations[colony.getColorString()] = colony.ants.size();
                 }
 
                 // If both colonies saw fewer than N_DEATHS, start poll.
@@ -277,7 +277,7 @@ struct Simulation
                     {
                         if (colony.ants.size() == 0 && !isExtinct(colony.id))
                         {
-                            tracked_populations[colony.getColorString] = -1;
+                            tracked_populations[colony.getColorString()] = -1;
                         }
                     }
 
