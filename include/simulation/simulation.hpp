@@ -32,9 +32,10 @@ struct Simulation
     vector<tuple<float, float>> spawnPoints;
     VictoryStatus vstat;
     bool isRunning = true;
-    int num_cols = 4;
+    int num_cols = Conf::MAX_COLONIES_COUNT;
     unordered_map<string, uint64_t> tracked_populations;
     bool earlyStoppingPoll = false;
+    bool finalTwo = false;
 
     explicit
 	Simulation(sf::Window& window)
@@ -162,16 +163,13 @@ struct Simulation
            }
            else if (cmd.at(0) == 'E')
            {
+               earlyStoppingPoll = false;
                string stop = cmd.substr(1);
                if (stop == "Yes") // Restart if poll is YES.
                {
                    vstat.interrupted = true;
                    isRunning = false;
                    break;
-               }
-               else
-               {
-                   earlyStoppingPoll = false;
                }
            }
            else
@@ -232,9 +230,10 @@ struct Simulation
             }
 
             // Implement early stopping. If there are fewer than n deaths in 15 seconds, create poll.
-            if (num_cols == 2 && clock.getElapsedTime().asSeconds() > 15 && earlyStoppingPoll == false)
+            if (num_cols == 2 && (int)(clock.getElapsedTime().asSeconds()) > 15 && earlyStoppingPoll == false)
             {
-                const int N_DEATHS = 10;
+                cout << "Early stopping reached." << endl;
+                const int N_DEATHS = 50;
                 int total = 0;
                 
                 // Look through all colonies and check population change.
@@ -271,7 +270,7 @@ struct Simulation
                 }
 
                 // Only two colonies remain. Start clock and initialize population tracking.
-                if (num_cols == 2)
+                if (num_cols == 2 && finalTwo == false)
                 {
                     for (Colony& colony: colonies)
                     {
@@ -282,6 +281,7 @@ struct Simulation
                     }
 
                     clock.restart();
+                    finalTwo = true;
                 }
             }
 

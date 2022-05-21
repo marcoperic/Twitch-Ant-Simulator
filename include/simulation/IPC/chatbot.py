@@ -8,7 +8,7 @@ import random
 
 from server import Server
 
-POLL_DURATION = 20 # Temporary - default 60?
+POLL_DURATION = 15 # Temporary - default 60?
 
 class TwitchBot(irc.bot.SingleServerIRCBot):
     def __init__(self, username, client_id, token, channel):
@@ -84,23 +84,25 @@ class TwitchBot(irc.bot.SingleServerIRCBot):
     def getCommandType(self, winner):
         token = self.cvar.poll_info[0].split("_")
         if (token[0] == 'E'):
-            return token[0] + winner #EYes, ENo
+            return token[0] + str(winner) #EYes, ENo
 
         return token[0] + winner + str(token[1])
 
     def getPollWinner(self, r):
         options = r['choices'] # Shuffle so that red isn't chosen by default when tied.
-        random.shuffle(options)
-
         # Handle early stopping scenario.
         if (len(options) == 2):
-            return max(options[0]['votes'], options[1]['votes'])
+            if (options[0]['votes'] > options[1]['votes']):
+                return options[0]['title']
+            else:
+                return options[1]['title']
 
+        random.shuffle(options)
         winner = options[0]
-        max = -1
+        maximum = -1
         for c in options:
-            if (c['votes'] > max):
-                max = c['votes']
+            if (c['votes'] > maximum):
+                maximum = c['votes']
                 winner = c['title']
 
         return winner[0] # return the first character - all we care about
