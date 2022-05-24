@@ -15,6 +15,7 @@
 #include <vector>
 #include <tuple>
 #include <iostream>
+#include <cmath>
 
 #define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
 
@@ -229,12 +230,12 @@ struct Simulation
                 processCommands(temp, dt);
             }
 
-            // Implement early stopping. If there are fewer than n deaths in 15 seconds, create poll.
-            if (num_cols == 2 && (int)(clock.getElapsedTime().asSeconds()) > 15 && earlyStoppingPoll == false)
+            // Implement early stopping. If there are fewer than n deaths in 30 seconds, create poll.
+            if (finalTwo == true && static_cast<int>((clock.getElapsedTime().asSeconds())) > 15 && earlyStoppingPoll == false)
             {
                 cout << "Early stopping reached." << endl;
-                const int N_DEATHS = 50;
-                int total = 0;
+                const float DELTA = 80.0;
+                float total = 0;
                 
                 // Look through all colonies and check population change.
                 for (Colony& colony: colonies)
@@ -243,21 +244,28 @@ struct Simulation
                     {
                         if (tracked_populations[colony.getColorString()] != -1)
                         {
-                            total += (tracked_populations[colony.getColorString()] - colony.ants.size());
+                            int temp = colony.ants.size() - tracked_populations[colony.getColorString()];
+                            total += abs(to<float>(temp));
                         }
                     }
                     
                     tracked_populations[colony.getColorString()] = colony.ants.size();
                 }
 
-                // If both colonies saw fewer than N_DEATHS, start poll.
-                if (total < N_DEATHS)
+                // If both colonies saw fewer than NET_LOSS, start poll.
+                if (total < DELTA)
                 {
+                    cout << "early stopping: " << total << endl;
                     earlyStoppingPoll = true;
                     cl_cont.server_Create_Poll("!" + getCurrentColoniesStr());
                 }
+                else
+                {
+                    clock.restart();
+                }
             }
 
+            // Check if any colonies are all out of ants. Mark them as dead.
             for (Colony& colony : colonies)
             {
                 if (colony.ants.size() == 0 && !isExtinct(colony.id))
@@ -274,9 +282,9 @@ struct Simulation
                 {
                     for (Colony& colony: colonies)
                     {
-                        if (colony.ants.size() == 0 && !isExtinct(colony.id))
+                        if (colony.ants.size() != 0 && !isExtinct(colony.id))
                         {
-                            tracked_populations[colony.getColorString()] = -1;
+                            tracked_populations[colony.getColorString()] = colony.ants.size();
                         }
                     }
 
@@ -298,7 +306,6 @@ struct Simulation
             }
 
 			for (Colony& colony : colonies) {
-                // cout << unsigned(colony.id) << endl; // print the numerical code.
 				colony.genericAntsUpdate(dt, world);
 			}
 			// Then update objectives and world sampling
@@ -306,10 +313,8 @@ struct Simulation
 				colony.update(dt, world);
 			}
 
-            if (num_cols == 1)
+            if (num_cols == 1) // End simulation if only one colony remains.
             {
-                // Only one colony left? End simulation.
-                //vstat.winner = colonies.get(0).getColorString();
                 for (Colony& colony : colonies)
                 {
                     if (!isExtinct(colony.id))
@@ -363,7 +368,7 @@ struct Simulation
         for (Colony& colony : colonies) {
             const uint32_t killed = colony.killWeakAnts(world);
             if (killed) {
-                const uint32_t initial_size = to<int32_t>(colony.ants.size()); // Could be cause of dead ants not being removed? May need to scale with new size of VA.
+                const uint32_t initial_size = to<int32_t>(colony.ants.size());
                 renderer.colonies[colony.id].cleanVAs(initial_size - killed, initial_size);
             }
         }
