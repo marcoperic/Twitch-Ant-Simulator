@@ -48,7 +48,7 @@ int main()
             // Update
             scene->update();
             // Render
-            window.clear(sf::Color(100, 100, 100));
+            window.clear(sf::Color(75, 75, 75));
             scene->render();
 
             if (clock.getElapsedTime().asMilliseconds() < 5000)
