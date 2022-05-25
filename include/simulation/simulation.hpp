@@ -231,10 +231,10 @@ struct Simulation
             }
 
             // Implement early stopping. If there are fewer than n deaths in 30 seconds, create poll.
-            if (finalTwo == true && static_cast<int>((clock.getElapsedTime().asSeconds())) > 15 && earlyStoppingPoll == false)
+            if (finalTwo == true && static_cast<int>((clock.getElapsedTime().asSeconds())) > 90 && earlyStoppingPoll == false)
             {
                 cout << "Early stopping reached." << endl;
-                const float DELTA = 80.0;
+                const float DELTA = 50.0;
                 float total = 0;
                 
                 // Look through all colonies and check population change.
