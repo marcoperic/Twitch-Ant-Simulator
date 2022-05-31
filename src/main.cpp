@@ -10,16 +10,22 @@
 #include "common/time_render.hpp"
 #include <time.h>
 #include <stdlib.h>
+#include <thread>
 using namespace edtr;
+
+void drawPollText(sf::RenderWindow& w, sf::Text t);
 
 int main()
 {
     sf::Clock clock;
     sf::Clock poll_clock;
+    sf::Clock poll_timer;
 	sf::ContextSettings settings;
     sf::Font font;
+    sf::Text polltxt;
     Conf::loadUserConf();
     Conf::loadTextures();
+    bool showPollText = false;
 	settings.antialiasingLevel = 4;
     int32_t window_style = Conf::USE_FULLSCREEN ? sf::Style::Fullscreen : sf::Style::Default;
 	sf::RenderWindow window(sf::VideoMode(Conf::WIN_WIDTH, Conf::WIN_HEIGHT), "AntSim", window_style, settings);
@@ -65,6 +71,20 @@ int main()
             // Draw timer
             window.draw(tc.getTimeText(TimeRender::HumanReadableTime(clock.getElapsedTime().asMilliseconds())));
             window.display();
+
+            // Draw poll effects
+            if (simulation.pollstr != NULL)
+            {
+                showPollText = true;
+                poll_timer.restart();
+                polltxt = *simulation.pollstr;
+                simulation.pollstr = NULL;
+            }
+
+            if (showPollText && poll_timer.getElapsedTime().asSeconds() < 5)
+            {
+                window.draw(polltxt);
+            }
         }
         
         clock.restart();

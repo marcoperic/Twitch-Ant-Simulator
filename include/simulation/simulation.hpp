@@ -8,6 +8,7 @@
 #include "render/renderer.hpp"
 #include "simulation/world/map_loader.hpp"
 #include "simulation/ant/fight_system.hpp"
+#include "editor/center-text-control.hpp"
 #include "world/async_distance_field_builder.hpp"
 #include "IPC/client-controller.h"
 #include "IPC/client-controller.cpp"
@@ -32,9 +33,12 @@ struct Simulation
     client_controller cl_cont;
     vector<tuple<float, float>> spawnPoints;
     VictoryStatus vstat;
+    unordered_map<string, uint64_t> tracked_populations;
+    TextControl tc;
+
+    sf::Text *pollstr = NULL;
     bool isRunning = true;
     int num_cols = Conf::MAX_COLONIES_COUNT;
-    unordered_map<string, uint64_t> tracked_populations;
     bool earlyStoppingPoll = false;
     bool finalTwo = false;
 
@@ -90,6 +94,7 @@ struct Simulation
                else
                {
                    c.createNWorker(quantity);
+                   pollstr = tc.getPollText('S', c.getColorString());
                }
 
                cout << "Spawned ant" << endl;
@@ -114,6 +119,7 @@ struct Simulation
                {
                    vector<sf::Vector2f> pos = c.set_radialNoise(c.base.position, 75, quantity);
                    world.addNFoodAt(pos, 10, quantity);
+                   pollstr = tc.getPollText('F', c.getColorString());
                }
            }
            else if (cmd.at(0) == 'K') // No quantity check necessary as these will only be sent by server.
@@ -127,6 +133,7 @@ struct Simulation
                 continue;
 
                c.killNAnts(world, quantity);
+               pollstr = tc.getPollText('K', c.getColorString());
            }
            else if (cmd.at(0) == 'Q')
            {
@@ -138,7 +145,8 @@ struct Simulation
                if (!found)
                 continue;
 
-               c.increaseAntSpeed(quantity / 1.0);  
+               c.increaseAntSpeed(quantity / 1.0); 
+               pollstr = tc.getPollText('Q', c.getColorString());
            }
            else if (cmd.at(0) == 'M')
            {
@@ -151,6 +159,7 @@ struct Simulation
                 continue;
 
                c.increaseSpawnRate(quantity / 10.0);
+               pollstr = tc.getPollText('M', c.getColorString());
            }
            else if (cmd.at(0) == '@')
            {

@@ -8,6 +8,8 @@ struct TextControl
     sf::Font myFont;
     VictoryStatus vstat;
 
+    explicit TextControl() {}
+
     explicit
     TextControl(sf::Font font)
     {
@@ -39,6 +41,25 @@ struct TextControl
     sf::Font getFont()
     {
         return myFont;
+    }
+
+    sf::Text *getPollText(char cmd, string color)
+    {
+        unordered_map<char, string> map;
+        map['S'] = "Spawn";
+        map['Q'] = "Quick";
+        map['K'] = "Kill";
+        map['F'] = "Food";
+        map['M'] = "Spawn rate";
+
+        sf::Text text("Ability " + map[cmd] + " applied to " + color + " colony.", myFont, 24);
+        sf::FloatRect textRect = text.getLocalBounds();
+        text.setOrigin(textRect.left + textRect.width / 2.0f,
+            textRect.top + textRect.height / 2.0f);
+        text.setPosition(sf::Vector2f(Conf::WIN_WIDTH / 2.0f, 40)); // Just below the timer.
+        text.setColor(sf::Color::Green);
+
+        return &text;
     }
 
     sf::Text getStartText()
