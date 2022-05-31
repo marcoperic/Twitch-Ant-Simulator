@@ -16,7 +16,6 @@
 #include <tuple>
 #include <iostream>
 #include <cmath>
-#include <thread>
 
 #define MAP_NAME "C:\\Users\\Marco\\Desktop\\cpp_ant\\Twitch-Ant-Simulator\\res\\map.png"
 
@@ -33,7 +32,6 @@ struct Simulation
     client_controller cl_cont;
     vector<tuple<float, float>> spawnPoints;
     VictoryStatus vstat;
-    TextControl tc(*Conf::GLOBAL_FONT);
     bool isRunning = true;
     int num_cols = Conf::MAX_COLONIES_COUNT;
     unordered_map<string, uint64_t> tracked_populations;
@@ -92,8 +90,6 @@ struct Simulation
                else
                {
                    c.createNWorker(quantity);
-                   thread displayText(tc.getPollText('S', c.getColorString()));
-                   displayText.detach();
                }
 
                cout << "Spawned ant" << endl;
@@ -118,9 +114,6 @@ struct Simulation
                {
                    vector<sf::Vector2f> pos = c.set_radialNoise(c.base.position, 75, quantity);
                    world.addNFoodAt(pos, 10, quantity);
-
-                   thread displayText(tc.getPollText('F', c.getColorString()));
-                   displayText.detach();
                }
            }
            else if (cmd.at(0) == 'K') // No quantity check necessary as these will only be sent by server.
@@ -134,8 +127,6 @@ struct Simulation
                 continue;
 
                c.killNAnts(world, quantity);
-               thread displayText(tc.getPollText('K', c.getColorString()));
-               displayText.detach();
            }
            else if (cmd.at(0) == 'Q')
            {
@@ -148,8 +139,6 @@ struct Simulation
                 continue;
 
                c.increaseAntSpeed(quantity / 1.0);  
-                thread displayText(tc.getPollText('Q', c.getColorString()));
-                displayText.detach();
            }
            else if (cmd.at(0) == 'M')
            {
@@ -162,10 +151,6 @@ struct Simulation
                 continue;
 
                c.increaseSpawnRate(quantity / 10.0);
-
-                // Show text indicating poll result is applied.
-                thread displayText(tc.getPollText('M', c.getColorString()));
-                displayText.detach();
            }
            else if (cmd.at(0) == '@')
            {
@@ -390,17 +375,6 @@ struct Simulation
         // Remove them
         for (Colony& colony : colonies) {
             colony.removeDeadAnts();
-        }
-    }
-
-    void displayText(sf::Text text)
-    {
-        const int SECONDS = 5;
-        sf::Clock textTimer;
-        
-        while (textTimer.getElapsedTime().asMilliseconds() < (SECONDS * 1000))
-        {
-            window.draw(text);
         }
     }
 
