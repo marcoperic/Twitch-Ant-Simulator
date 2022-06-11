@@ -62,6 +62,11 @@ struct TextControl
         return &text;
     }
 
+    sf::Text getDefaultText()
+    {
+        return sf::Text text("", myFont, 1);
+    }
+
     sf::Text getStartText()
     {
         sf::Text text("Simulation started! Enter commands in chat and coordinate with each other to help a colony win!", myFont, 32);

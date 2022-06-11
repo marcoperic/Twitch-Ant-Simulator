@@ -72,18 +72,23 @@ int main()
             window.draw(tc.getTimeText(TimeRender::HumanReadableTime(clock.getElapsedTime().asMilliseconds())));
             window.display();
 
+            // Draw poll text
+            window.draw(simulation.pollstr);
+            window.display(); // needed?
+
             // Draw poll effects
-            if (simulation.pollstr != NULL)
+            if (simulation.pollstr != tc.getDefaultText() && !showPollText) // Check to see if font size == 1. Or if text == ""
             {
                 showPollText = true;
                 poll_timer.restart();
-                polltxt = *simulation.pollstr;
-                simulation.pollstr = NULL;
+                polltxt = simulation.pollstr;
             }
 
-            if (showPollText && poll_timer.getElapsedTime().asSeconds() < 5)
+            if (poll_timer.getElapsedTime().asSeconds() > 5 && showPollText) // 
             {
-                window.draw(polltxt);
+                // window.draw(polltxt);
+                simulation.pollstr = tc.getDefaultText();
+                showPollText = false;
             }
         }
         

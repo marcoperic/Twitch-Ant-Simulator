@@ -36,7 +36,7 @@ struct Simulation
     unordered_map<string, uint64_t> tracked_populations;
     TextControl tc;
 
-    sf::Text *pollstr = NULL;
+    sf::Text pollstr = tc.getDefaultText();
     bool isRunning = true;
     int num_cols = Conf::MAX_COLONIES_COUNT;
     bool earlyStoppingPoll = false;
